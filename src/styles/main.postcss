@@ -1,0 +1,98 @@
+@import 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @custom-selector :--heading h1, h2, h3, h4, h5, h6;
+
+  html {
+    @apply font-baloo text-[1rem] leading-none;
+  }
+
+  :--heading {
+    @apply relative font-medium !leading-none;
+
+    line-height: 1em ;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl font-normal;
+  }
+
+  h5 {
+    @apply text-lg font-normal;
+  }
+
+  h6 {
+    @apply text-base font-normal;
+  }
+
+  .container {
+    @apply p-4 !max-w-none md:p-5 lg:p-6;
+  }
+
+  .title::before {
+    @apply h-full w-2 bg-primary absolute -left-4 content-[''] md:-left-5 lg:-left-6;
+
+    border-radius: 0 var(--rounded-prop) var(--rounded-prop) 0;
+  }
+
+  .title-right {
+    @apply text-right;
+
+    &::before {
+      @apply left-auto -right-4 md:-right-5 lg:-right-6;
+
+      border-radius: var(--rounded-prop) 0 0 var(--rounded-prop);
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-base-200 drop-shadow container;
+  }
+}
+
+@layer utilities {
+  .grid-cols-fit-sm {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+
+  .card-bottom {
+    @apply rounded-b-none;
+  }
+
+  .card-top {
+    @apply rounded-t-none;
+  }
+
+  .card-left {
+    @apply rounded-l: none;
+  }
+
+  .card-right {
+    @apply rounded-r-none;
+  }
+
+  .rounded-btn {
+    border-radius: var(--rounded-btn) !important;
+  }
+
+  .animation-general {
+    transition-duration: var(--animation-general);
+  }
+}

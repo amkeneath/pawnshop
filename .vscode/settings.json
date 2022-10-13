@@ -1,0 +1,74 @@
+{
+  "[jsonc]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "cSpell.words": [
+    "Baloo",
+    "bumbleblee",
+    "composables",
+    "cssnano",
+    "daisyui",
+    "demi",
+    "endregion",
+    "headlessui",
+    "heroicons",
+    "iconify",
+    "intlify",
+    "lofi",
+    "nprogress",
+    "pinia",
+    "pnpm",
+    "postcss",
+    "precache",
+    "precaching",
+    "starport",
+    "stylelint",
+    "synthwave",
+    "tailwindcss",
+    "taze",
+    "themepair",
+    "typecheck",
+    "unplugin",
+    "Uturn",
+    "uuidv",
+    "VITE",
+    "vueuse",
+    "wireframe"
+  ],
+  "css.validate": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "comments": false,
+    "other": true,
+    "strings": true
+  },
+  "editor.tabSize": 2,
+  "eslint.alwaysShowStatus": true,
+  "eslint.packageManager": "pnpm",
+  "eslint.validate": ["vue", "javascript"],
+  "files.associations": {
+    "*.css": "postcss"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "node_modules": true
+  },
+  "hide-files.files": [],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.localesPaths": "locales",
+  "i18n-ally.sortKeys": true,
+  "npm.packageManager": "pnpm",
+  "prettier.enable": false,
+  "stylelint.snippet": ["css", "less", "postcss", "scss", "vue", "sass"],
+  "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass"],
+  "tailwindCSS.emmetCompletions": true
+}

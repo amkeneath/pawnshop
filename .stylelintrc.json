@@ -1,0 +1,35 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-prettier", "stylelint-config-recess-order"],
+  "ignoreFiles": ["**/*.js", "**/*.jsx", "**/*.tsx", "**/*.ts"],
+  "overrides": [
+    {
+      "customSyntax": "postcss-html",
+      "files": ["**/*.(html|vue)"]
+    }
+  ],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["tailwind", "layer", "apply", "variants", "responsive", "screen", "function", "if", "each", "include", "mixin"]
+      }
+    ],
+    "block-no-empty": null,
+    "indentation": 2,
+    "no-empty-source": null,
+    "number-leading-zero": "never",
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["v-deep"]
+      }
+    ],
+    "selector-type-no-unknown": null
+  }
+}
