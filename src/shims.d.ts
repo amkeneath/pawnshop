@@ -15,13 +15,3 @@ declare interface XWorkerNavigator extends WorkerNavigator {
   mediaDevices?: MediaDevices
 }
 // #endregion
-
-// #region <EVENT>
-declare interface XEventTarget extends EventTarget {
-  value?: string
-}
-
-declare interface XEvent extends Event {
-  target?: XEventTarget
-}
-// #endregion

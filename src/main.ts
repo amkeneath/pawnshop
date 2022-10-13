@@ -22,5 +22,5 @@ app.mount('#app').$nextTick(() => {
 })
 
 if (typeof window !== 'undefined') {
-  // import('~/pwa')
+  import('~/pwa')
 }

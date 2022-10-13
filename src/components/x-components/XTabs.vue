@@ -50,11 +50,11 @@ watch(
 </script>
 
 <template>
-  <div ref="tabsRef" class="tabs gap-8 flex-nowrap relative w-full">
-    <a v-for="(item, idx) of props.items" :key="item.text" class="tab px-0 py-3 h-full" :class="{ active: idx === model }" @click.stop="setActive(idx)">
+  <div ref="tabsRef" class="tabs relative w-full flex-nowrap gap-8">
+    <a v-for="(item, idx) of props.items" :key="item.text" class="tab h-full px-0 py-3" :class="{ active: idx === model }" @click.stop="setActive(idx)">
       <h5>{{ item.text }}</h5>
     </a>
-    <span class="tabs-prop absolute h-1 w-0 bg-primary left-0 bottom-0 block translate-x-1/2" :style="{ width: propWidth, left: propLeft }" />
+    <span class="tabs-prop absolute left-0 bottom-0 block h-1 w-0 translate-x-1/2 bg-primary" :style="{ width: propWidth, left: propLeft }" />
   </div>
 </template>
 

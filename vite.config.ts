@@ -9,8 +9,8 @@ import inspect from 'vite-plugin-inspect'
 import layouts from 'vite-plugin-vue-layouts'
 import pages from 'vite-plugin-pages'
 import path from 'path'
-// import manifest from './manifest.json'
-// import { VitePWA as pwa } from 'vite-plugin-pwa'
+import manifest from './manifest.json'
+import { VitePWA as pwa } from 'vite-plugin-pwa'
 import stylelintPlugin from 'vite-plugin-stylelint'
 import vue from '@vitejs/plugin-vue'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
@@ -60,25 +60,25 @@ export default defineConfig(({ mode }) => {
         resolvers: [
           iconsResolver({
             componentPrefix: 'icon',
-            enabledCollections: ['carbon', 'mdi', 'icon-park-outline', 'heroicons', 'icons-heroicons']
+            enabledCollections: ['carbon', 'mdi', 'icon-park-outline', 'heroicons', 'icons-heroicons', 'icon-heroicons']
           })
         ],
         dts: 'src/auto-imports.d.ts',
         dirs: ['src/composables', 'src/store'],
         vueTemplate: true
       }),
-      // pwa({
-      //   strategies: 'injectManifest',
-      //   includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
-      //   srcDir: 'src',
-      //   filename: 'sw.ts',
-      //   registerType: 'autoUpdate',
-      //   manifest,
-      //   devOptions: {
-      //     enabled: true,
-      //     type: 'module'
-      //   }
-      // }),
+      pwa({
+        strategies: 'injectManifest',
+        includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
+        srcDir: 'src',
+        filename: 'sw.ts',
+        registerType: 'autoUpdate',
+        manifest,
+        devOptions: {
+          enabled: true,
+          type: 'module'
+        }
+      }),
       icons({
         autoInstall: true,
         compiler: 'vue3'

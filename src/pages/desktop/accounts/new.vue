@@ -38,6 +38,11 @@ const saveSignature = (src = ''): void => {
 }
 </script>
 
+<route lang="yaml">
+  meta:
+    layout: desktop
+  </route>
+
 <template>
   <section class="flex flex-col gap-4">
     <header class="navbar card sticky top-0 z-40 flex flex-row gap-4 overflow-visible bg-base-100 shadow">

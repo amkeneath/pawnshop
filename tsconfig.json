@@ -20,7 +20,15 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "types": ["vite/client", "vue/ref-macros", "vite-plugin-pages/client", "vite-plugin-vue-layouts/client", "unplugin-icons/types/vue", "w3c-image-capture"],
+    "types": [
+      "vite/client",
+      "vue/ref-macros",
+      "vite-plugin-pages/client",
+      "vite-plugin-vue-layouts/client",
+      "unplugin-icons/types/vue",
+      "w3c-image-capture",
+      "vite-plugin-pwa/client"
+    ],
     "useDefineForClassFields": true
   },
   "exclude": ["dist", "node_modules", "cypress"],

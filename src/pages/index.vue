@@ -36,19 +36,28 @@ const setActiveItem = (index: number): void => {
 <template>
   <section class="relative flex h-screen w-full flex-col">
     <div class="fixed w-full">
-      <div class="card card-top">
-        <div class="flex justify-between items-center">
+      <div class="card-top card">
+        <div class="flex items-center justify-between">
           <h1 class="title">Loan</h1>
-          <component :is="icon.xMark" class="text-xl"/>
+          <component :is="icon.xMark" class="text-xl" />
         </div>
         <x-tabs v-model="tabModel" :items="categories" class="-mb-2" />
       </div>
       <div class="container">
         <x-tab-contents :active="tabModel">
-          <div v-for="category of categories" :key="category.text" class="tab-content grid grid-cols-fit-sm gap-3">
-            <a v-for="(jewelry, idx) of jewelries" :key="jewelry.text" class="bg-base-200 text-base-content flex items-center gap-1 rounded-btn" @click.stop="setActiveItem(idx)">
-              <component :is="jewelry.icon" class="bg-base-100 text-base-content rounded w-16 h-16 flex-0 p-2 rounded-btn scale-75 flex-none animation-general" :class="{'bg-primary text-primary-content': idx === activeItem}" />
-              <span class="w-full animation-general" :class="{'text-primary': idx === activeItem}">{{ jewelry.text }}</span>
+          <div v-for="category of categories" :key="category.text" class="tab-content grid-cols-fit-sm grid gap-3">
+            <a
+              v-for="(jewelry, idx) of jewelries"
+              :key="jewelry.text"
+              class="rounded-btn flex items-center gap-1 bg-base-200 text-base-content"
+              @click.stop="setActiveItem(idx)"
+            >
+              <component
+                :is="jewelry.icon"
+                class="flex-0 rounded-btn animation-general h-16 w-16 flex-none scale-75 rounded bg-base-100 p-2 text-base-content"
+                :class="{ 'bg-primary text-primary-content': idx === activeItem }"
+              />
+              <span class="animation-general w-full" :class="{ 'text-primary': idx === activeItem }">{{ jewelry.text }}</span>
             </a>
           </div>
         </x-tab-contents>

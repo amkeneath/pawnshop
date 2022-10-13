@@ -27,9 +27,9 @@ const transform = computed(() => `translateX(calc(${active.value} * (-100% - ${g
 </template>
 
 <style lang="postcss" scoped>
-  .tab-contents > .tab-content-wrapper {
-    transition-duration: var(--animation-general);
-  }
+.tab-contents > .tab-content-wrapper {
+  transition-duration: var(--animation-general);
+}
 </style>
 
 <style lang="postcss">

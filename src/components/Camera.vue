@@ -1,4 +1,15 @@
 <script setup lang="ts">
+// #region <WORKER NAVIGATOR>
+interface MediaDevices {
+  getDisplayMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>
+  getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>
+}
+
+interface XWorkerNavigator extends WorkerNavigator {
+  mediaDevices?: MediaDevices
+}
+// #endregion
+
 interface Props {
   modelValue?: boolean
   id?: string
@@ -121,7 +132,7 @@ const closeSideMenu = (): void => {
 const setMediaStream = (): void => {
   const xNavigator: XWorkerNavigator = navigator
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
-  const constraints: any = {}
+  const constraints: MediaStreamConstraints = {}
   constraints.audio = { deviceId: activeMicrophoneId.value }
   constraints.video = { deviceId: activeCameraId.value }
   if (xNavigator.mediaDevices) {
@@ -146,7 +157,7 @@ const setMediaStream = (): void => {
 
         mediaStream.value = stream
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         console.log('ERROR:setMediaStream', err)
       })
   }

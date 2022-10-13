@@ -2,11 +2,45 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const IconCarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
+  const IconHeroiconsArrowDownOnSquare: typeof import('~icons/heroicons/arrow-down-on-square')['default']
+  const IconHeroiconsArrowUturnLeft: typeof import('~icons/heroicons/arrow-uturn-left')['default']
+  const IconHeroiconsBriefcase: typeof import('~icons/heroicons/briefcase')['default']
+  const IconHeroiconsCamera: typeof import('~icons/heroicons/camera')['default']
+  const IconHeroiconsChevronDoubleDown: typeof import('~icons/heroicons/chevron-double-down')['default']
+  const IconHeroiconsChevronDoubleUp: typeof import('~icons/heroicons/chevron-double-up')['default']
+  const IconHeroiconsChevronDown: typeof import('~icons/heroicons/chevron-down')['default']
+  const IconHeroiconsChevronLeft: typeof import('~icons/heroicons/chevron-left')['default']
+  const IconHeroiconsChevronRight: typeof import('~icons/heroicons/chevron-right')['default']
+  const IconHeroiconsChevronUp: typeof import('~icons/heroicons/chevron-up')['default']
+  const IconHeroiconsCog6Tooth: typeof import('~icons/heroicons/cog6-tooth')['default']
   const IconHeroiconsDevicePhoneMobile: typeof import('~icons/heroicons/device-phone-mobile')['default']
+  const IconHeroiconsEllipsisHorizontal: typeof import('~icons/heroicons/ellipsis-horizontal')['default']
   const IconHeroiconsLifebuoy: typeof import('~icons/heroicons/lifebuoy')['default']
+  const IconHeroiconsListBullet: typeof import('~icons/heroicons/list-bullet')['default']
+  const IconHeroiconsMagnifyingGlass: typeof import('~icons/heroicons/magnifying-glass')['default']
+  const IconHeroiconsMicrophone: typeof import('~icons/heroicons/microphone')['default']
+  const IconHeroiconsMinus: typeof import('~icons/heroicons/minus')['default']
+  const IconHeroiconsMoon: typeof import('~icons/heroicons/moon')['default']
+  const IconHeroiconsPencilSquare: typeof import('~icons/heroicons/pencil-square')['default']
+  const IconHeroiconsPlay: typeof import('~icons/heroicons/play')['default']
+  const IconHeroiconsPlus: typeof import('~icons/heroicons/plus')['default']
   const IconHeroiconsStar: typeof import('~icons/heroicons/star')['default']
+  const IconHeroiconsStop: typeof import('~icons/heroicons/stop')['default']
+  const IconHeroiconsSun: typeof import('~icons/heroicons/sun')['default']
+  const IconHeroiconsTrash: typeof import('~icons/heroicons/trash')['default']
   const IconHeroiconsTruck: typeof import('~icons/heroicons/truck')['default']
+  const IconHeroiconsVideoCamera: typeof import('~icons/heroicons/video-camera')['default']
+  const IconHeroiconsWifi: typeof import('~icons/heroicons/wifi')['default']
   const IconHeroiconsXMark: typeof import('~icons/heroicons/x-mark')['default']
+  const IconIconParkOutlineDiamondRing: typeof import('~icons/icon-park-outline/diamond-ring')['default']
+  const IconIconParkOutlineHammerAndAnvil: typeof import('~icons/icon-park-outline/hammer-and-anvil')['default']
+  const IconIconParkOutlineIncreaseTheScale: typeof import('~icons/icon-park-outline/increase-the-scale')['default']
+  const IconIconParkOutlinePaperMoneyTwo: typeof import('~icons/icon-park-outline/paper-money-two')['default']
+  const IconIconParkOutlineTableReport: typeof import('~icons/icon-park-outline/table-report')['default']
+  const IconIconParkOutlineTicket: typeof import('~icons/icon-park-outline/ticket')['default']
+  const IconIconParkOutlineTime: typeof import('~icons/icon-park-outline/time')['default']
+  const IconIconParkOutlineTransactionOrder: typeof import('~icons/icon-park-outline/transaction-order')['default']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
@@ -298,11 +332,45 @@ import { UnwrapRef } from 'vue'
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly IconCarbonLogoGithub: UnwrapRef<typeof import('~icons/carbon/logo-github')['default']>
+    readonly IconHeroiconsArrowDownOnSquare: UnwrapRef<typeof import('~icons/heroicons/arrow-down-on-square')['default']>
+    readonly IconHeroiconsArrowUturnLeft: UnwrapRef<typeof import('~icons/heroicons/arrow-uturn-left')['default']>
+    readonly IconHeroiconsBriefcase: UnwrapRef<typeof import('~icons/heroicons/briefcase')['default']>
+    readonly IconHeroiconsCamera: UnwrapRef<typeof import('~icons/heroicons/camera')['default']>
+    readonly IconHeroiconsChevronDoubleDown: UnwrapRef<typeof import('~icons/heroicons/chevron-double-down')['default']>
+    readonly IconHeroiconsChevronDoubleUp: UnwrapRef<typeof import('~icons/heroicons/chevron-double-up')['default']>
+    readonly IconHeroiconsChevronDown: UnwrapRef<typeof import('~icons/heroicons/chevron-down')['default']>
+    readonly IconHeroiconsChevronLeft: UnwrapRef<typeof import('~icons/heroicons/chevron-left')['default']>
+    readonly IconHeroiconsChevronRight: UnwrapRef<typeof import('~icons/heroicons/chevron-right')['default']>
+    readonly IconHeroiconsChevronUp: UnwrapRef<typeof import('~icons/heroicons/chevron-up')['default']>
+    readonly IconHeroiconsCog6Tooth: UnwrapRef<typeof import('~icons/heroicons/cog6-tooth')['default']>
     readonly IconHeroiconsDevicePhoneMobile: UnwrapRef<typeof import('~icons/heroicons/device-phone-mobile')['default']>
+    readonly IconHeroiconsEllipsisHorizontal: UnwrapRef<typeof import('~icons/heroicons/ellipsis-horizontal')['default']>
     readonly IconHeroiconsLifebuoy: UnwrapRef<typeof import('~icons/heroicons/lifebuoy')['default']>
+    readonly IconHeroiconsListBullet: UnwrapRef<typeof import('~icons/heroicons/list-bullet')['default']>
+    readonly IconHeroiconsMagnifyingGlass: UnwrapRef<typeof import('~icons/heroicons/magnifying-glass')['default']>
+    readonly IconHeroiconsMicrophone: UnwrapRef<typeof import('~icons/heroicons/microphone')['default']>
+    readonly IconHeroiconsMinus: UnwrapRef<typeof import('~icons/heroicons/minus')['default']>
+    readonly IconHeroiconsMoon: UnwrapRef<typeof import('~icons/heroicons/moon')['default']>
+    readonly IconHeroiconsPencilSquare: UnwrapRef<typeof import('~icons/heroicons/pencil-square')['default']>
+    readonly IconHeroiconsPlay: UnwrapRef<typeof import('~icons/heroicons/play')['default']>
+    readonly IconHeroiconsPlus: UnwrapRef<typeof import('~icons/heroicons/plus')['default']>
     readonly IconHeroiconsStar: UnwrapRef<typeof import('~icons/heroicons/star')['default']>
+    readonly IconHeroiconsStop: UnwrapRef<typeof import('~icons/heroicons/stop')['default']>
+    readonly IconHeroiconsSun: UnwrapRef<typeof import('~icons/heroicons/sun')['default']>
+    readonly IconHeroiconsTrash: UnwrapRef<typeof import('~icons/heroicons/trash')['default']>
     readonly IconHeroiconsTruck: UnwrapRef<typeof import('~icons/heroicons/truck')['default']>
+    readonly IconHeroiconsVideoCamera: UnwrapRef<typeof import('~icons/heroicons/video-camera')['default']>
+    readonly IconHeroiconsWifi: UnwrapRef<typeof import('~icons/heroicons/wifi')['default']>
     readonly IconHeroiconsXMark: UnwrapRef<typeof import('~icons/heroicons/x-mark')['default']>
+    readonly IconIconParkOutlineDiamondRing: UnwrapRef<typeof import('~icons/icon-park-outline/diamond-ring')['default']>
+    readonly IconIconParkOutlineHammerAndAnvil: UnwrapRef<typeof import('~icons/icon-park-outline/hammer-and-anvil')['default']>
+    readonly IconIconParkOutlineIncreaseTheScale: UnwrapRef<typeof import('~icons/icon-park-outline/increase-the-scale')['default']>
+    readonly IconIconParkOutlinePaperMoneyTwo: UnwrapRef<typeof import('~icons/icon-park-outline/paper-money-two')['default']>
+    readonly IconIconParkOutlineTableReport: UnwrapRef<typeof import('~icons/icon-park-outline/table-report')['default']>
+    readonly IconIconParkOutlineTicket: UnwrapRef<typeof import('~icons/icon-park-outline/ticket')['default']>
+    readonly IconIconParkOutlineTime: UnwrapRef<typeof import('~icons/icon-park-outline/time')['default']>
+    readonly IconIconParkOutlineTransactionOrder: UnwrapRef<typeof import('~icons/icon-park-outline/transaction-order')['default']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
