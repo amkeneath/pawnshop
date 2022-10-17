@@ -231,7 +231,7 @@ setMenu()
         </div>
         <input v-if="!fullTheme" type="checkbox" class="toggle-primary toggle" :checked="isDark" @change="toggleDark(!isDark)" />
         <div v-else class="dropdown-top dropdown">
-          <button tabindex="0" class="btn-circle btn btn-ghost">
+          <button tabindex="0" class="btn-ghost btn-circle btn">
             <component :is="icons.briefcase" class="text-base" />
           </button>
           <ul tabindex="0" class="rounded-box menu-compact dropdown-content menu mt-3 w-52 gap-1 bg-base-100 p-2 shadow">

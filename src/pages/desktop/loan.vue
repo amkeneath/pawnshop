@@ -118,10 +118,10 @@ const submitForm = (): void => {
 
 <template>
   <section class="flex flex-col gap-4">
-    <header class="navbar card sticky top-0 z-40 flex flex-row gap-4 overflow-visible bg-base-100 shadow">
+    <header class="card navbar sticky top-0 z-40 flex flex-row gap-4 overflow-visible bg-base-100 shadow">
       <div class="navbar-start">
         <div class="dropdown">
-          <button tabindex="0" class="btn-circle btn btn-ghost">
+          <button tabindex="0" class="btn-ghost btn-circle btn">
             <component :is="icons.ellipsisHorizontal" class="text-base" />
           </button>
           <ul tabindex="0" class="rounded-box menu-compact dropdown-content menu mt-3 w-52 bg-base-100 p-2 shadow">
@@ -138,9 +138,9 @@ const submitForm = (): void => {
             <li><a>Deposit</a></li>
           </ul>
         </div>
-        <button class="btn btn-ghost">New</button>
-        <button class="btn btn-ghost">Redeem</button>
-        <button class="btn btn-ghost">Renew</button>
+        <button class="btn-ghost btn">New</button>
+        <button class="btn-ghost btn">Redeem</button>
+        <button class="btn-ghost btn">Renew</button>
       </div>
       <div class="navbar-center">
         <label class="input-group">
@@ -149,27 +149,27 @@ const submitForm = (): void => {
         </label>
       </div>
       <div class="navbar-end">
-        <button class="btn btn-ghost">Inquiry</button>
-        <button class="btn btn-ghost">
+        <button class="btn-ghost btn">Inquiry</button>
+        <button class="btn-ghost btn">
           <component :is="icons.listBullet" class="text-base" />
         </button>
-        <button class="btn btn-ghost">
+        <button class="btn-ghost btn">
           <component :is="icons.chevronLeft" class="text-base" />
         </button>
-        <button class="btn btn-ghost">
+        <button class="btn-ghost btn">
           <component :is="icons.chevronRight" class="text-base" />
         </button>
-        <button class="btn btn-ghost">
+        <button class="btn-ghost btn">
           <component :is="icons.pencilSquare" class="text-base" />
         </button>
-        <button class="btn btn-ghost">
+        <button class="btn-ghost btn">
           <component :is="icons.trash" class="text-base" />
         </button>
         <div class="divider-horizontal divider py-4"></div>
-        <button class="btn-circle btn btn-ghost">
+        <button class="btn-ghost btn-circle btn">
           <component :is="icons.arrowUturnLeft" class="text-base" />
         </button>
-        <button form="loan" class="btn-circle btn btn-ghost" type="submit">
+        <button form="loan" class="btn-ghost btn-circle btn" type="submit">
           <component :is="icons.arrowDownOnSquare" class="text-base" />
         </button>
       </div>
@@ -252,7 +252,7 @@ const submitForm = (): void => {
             <th class="bg-primary text-primary-content" />
             <th class="bg-primary py-2 text-primary-content">
               <div class="dropdown-end dropdown">
-                <button tabindex="0" class="btn btn-ghost gap-2">Actions</button>
+                <button tabindex="0" class="btn-ghost btn gap-2">Actions</button>
                 <ul tabindex="0" class="rounded-box menu-compact dropdown-content menu mt-3 flex w-52 flex-row justify-center bg-base-100 p-2 shadow">
                   <li>
                     <a class="text-error" @click.stop="removeAllTablePawnItems()">
@@ -285,10 +285,10 @@ const submitForm = (): void => {
               <td class="bg-base-100 text-base-content" />
               <td class="bg-base-100 py-2 text-base-content">
                 <div class="flex">
-                  <button class="btn-circle btn btn-ghost" @click.stop="removeTablePawnItem(idx)">
+                  <button class="btn-ghost btn-circle btn" @click.stop="removeTablePawnItem(idx)">
                     <component :is="icons.trash" class="text-base text-error" />
                   </button>
-                  <button class="swap btn-circle btn btn-ghost swap-rotate" @click.stop="toggleTablePawnItemDetails(idx)">
+                  <button class="btn-ghost swap-rotate btn-circle btn swap" @click.stop="toggleTablePawnItemDetails(idx)">
                     <input type="checkbox" :checked="tablePawnItem.open" />
                     <component :is="icons.chevronUp" class="swap-on text-base" />
                     <component :is="icons.chevronDown" class="swap-off text-base" />

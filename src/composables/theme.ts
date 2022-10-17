@@ -36,7 +36,7 @@ let toggleDark = useToggle(isDark)
 
 const preferredDark = usePreferredDark()
 
-const themeColor = computed(() => (isDark.value ? '#333333' : '#dddddd'))
+const themeColor = computed(() => (isDark.value ? '#FFBD9A' : '#C9BCFF'))
 const favicon = computed(() => (preferredDark.value ? 'favicon-dark.svg' : 'favicon.svg'))
 
 const setFavicon = useFavicon(favicon)

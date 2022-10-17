@@ -35,7 +35,7 @@ const setActiveItem = (index: number): void => {
 
 <template>
   <section class="relative flex h-screen w-full flex-col">
-    <div class="fixed w-full">
+    <div class="max-w-screen fixed max-h-screen w-full">
       <div class="card-top card">
         <div class="flex items-center justify-between">
           <h1 class="title">Loan</h1>
@@ -64,7 +64,31 @@ const setActiveItem = (index: number): void => {
       </div>
     </div>
     <div class="card-bottom card mt-auto h-1/2 w-full"></div>
+    <div class="safe-left fixed top-0 left-0 h-full" />
+    <div class="safe-right fixed top-0 right-0 h-full" />
+    <div class="safe-top fixed top-0 left-0 w-full" />
+    <div class="safe-bottom fixed left-0 bottom-0 w-full" />
   </section>
 </template>
 
-<style lang="postcss" scoped></style>
+<style lang="postcss" scoped>
+[class^='safe-'] {
+  @apply bg-red-600;
+}
+
+.safe-left {
+  width: env(safe-area-inset-left, 20px);
+}
+
+.safe-right {
+  width: env(safe-area-inset-right, 20px);
+}
+
+.safe-top {
+  height: env(safe-area-inset-top, 20px);
+}
+
+.safe-bottom {
+  height: env(safe-area-inset-bottom, 20px);
+}
+</style>

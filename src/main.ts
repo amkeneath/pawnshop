@@ -8,6 +8,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import App from './App.vue'
+import type { UserModule } from './types'
 
 const app = createApp(App)
 
@@ -15,12 +16,8 @@ const routes = setupLayouts(generatedRoutes)
 const router = createRouter({ history: createWebHistory(), routes })
 app.use(router)
 
-Object.values(import.meta.glob<{ install: any }>('./modules/*.ts', { eager: true })).map((i) => i.install?.({ app, router, routes }))
+Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true })).map((i) => i.install?.({ app, router, routes }))
 
 app.mount('#app').$nextTick(() => {
   postMessage({ payload: 'removeLoading' }, '*')
 })
-
-if (typeof window !== 'undefined') {
-  import('~/pwa')
-}

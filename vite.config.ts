@@ -9,6 +9,7 @@ import inspect from 'vite-plugin-inspect'
 import layouts from 'vite-plugin-vue-layouts'
 import pages from 'vite-plugin-pages'
 import path from 'path'
+import preview from 'vite-plugin-vue-component-preview'
 import manifest from './manifest.json'
 import { VitePWA as pwa } from 'vite-plugin-pwa'
 import stylelintPlugin from 'vite-plugin-stylelint'
@@ -37,6 +38,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
+      preview(),
       vue({
         include: [/\.vue$/, /\.md$/],
         reactivityTransform: true
@@ -69,7 +71,7 @@ export default defineConfig(({ mode }) => {
       }),
       pwa({
         strategies: 'injectManifest',
-        includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
+        includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-dark.svg', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
         srcDir: 'src',
         filename: 'sw.ts',
         registerType: 'autoUpdate',

@@ -11,7 +11,7 @@ const icons = {
 <template>
   <section class="">
     <div class="themes">
-      <button v-for="t of themes" :key="t" class="aspect-h-1 aspect-w-1 btn card btn-ghost border-none shadow" @click="setTheme(t as BasicColorSchema)">
+      <button v-for="t of themes" :key="t" class="btn-ghost aspect-h-1 aspect-w-1 btn card border-none shadow" @click="setTheme(t as BasicColorSchema)">
         <div :[themeAttribute]="t" class="absolute flex flex-col gap-2 bg-base-100 py-4 text-base-content">
           <h3 class="flex items-center gap-2 px-4 text-lg font-bold capitalize">
             {{ t }}

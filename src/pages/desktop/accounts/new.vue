@@ -39,19 +39,19 @@ const saveSignature = (src = ''): void => {
 </script>
 
 <route lang="yaml">
-  meta:
-    layout: desktop
-  </route>
+meta:
+  layout: desktop
+</route>
 
 <template>
   <section class="flex flex-col gap-4">
-    <header class="navbar card sticky top-0 z-40 flex flex-row gap-4 overflow-visible bg-base-100 shadow">
+    <header class="card navbar sticky top-0 z-40 flex flex-row gap-4 overflow-visible bg-base-100 shadow">
       <div class="navbar-start">
         <h2 class="px-2">New Account</h2>
       </div>
       <div class="navbar-center"></div>
       <div class="navbar-end">
-        <button form="loan" class="btn-circle btn btn-ghost" type="submit">
+        <button form="loan" class="btn-ghost btn-circle btn" type="submit">
           <component :is="icons.arrowDownOnSquare" class="text-base" />
         </button>
       </div>
@@ -95,7 +95,7 @@ const saveSignature = (src = ''): void => {
                 </button>
               </div>
             </div>
-            <button v-else class="btn-square btn btn-ghost h-full w-full rounded-none" @click.stop="openCamera()">
+            <button v-else class="btn-ghost btn-square btn h-full w-full rounded-none" @click.stop="openCamera()">
               <component :is="icons.camera" class="h-20 w-20" />
             </button>
           </div>
@@ -119,7 +119,7 @@ const saveSignature = (src = ''): void => {
               </button>
             </div>
           </div>
-          <button v-else class="btn btn-ghost h-full w-full rounded-none" @click.stop="openSignaturePad()">Signature</button>
+          <button v-else class="btn-ghost btn h-full w-full rounded-none" @click.stop="openSignaturePad()">Signature</button>
         </div>
       </div>
     </div>

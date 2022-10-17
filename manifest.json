@@ -1,10 +1,11 @@
 {
-  "name": "Vite PWA",
-  "short_name": "Vite PWA",
-  "description": "A Vite starter app ready-to-go as a Progressive Web App.",
-  "background_color": "#5a0fc8",
-  "theme_color": "#5a0fc8",
+  "name": "Pawnshop",
+  "short_name": "Pawnshop",
+  "description": "Pawnshop system",
+  "background_color": "#121315",
+  "theme_color": "#FFBD9A",
   "display": "standalone",
+  "start_url": "/?standalone=true",
   "icons": [
     {
       "src": "/images/pwa/icon-maskable.png",

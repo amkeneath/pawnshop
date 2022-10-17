@@ -203,24 +203,24 @@ useResizeObserver(canvasRef, resizeCanvas)
     <div class="h-full w-full p-6">
       <canvas ref="canvasRef" class="absolute top-0 left-0 h-full w-full bg-base-200" />
       <header
-        class="navbar card flex flex-row gap-4 overflow-visible bg-base-100 text-base-content shadow transition-all duration-500"
+        class="card navbar flex flex-row gap-4 overflow-visible bg-base-100 text-base-content shadow transition-all duration-500"
         :class="{ 'opacity-0 -translate-y-full': drawing }"
       >
         <div class="navbar-start"></div>
         <div class="navbar-center">
-          <button class="btn-circle btn btn-ghost" @click.stop="close()">
+          <button class="btn-ghost btn-circle btn" @click.stop="close()">
             <component :is="icons.xMark" class="text-base" />
           </button>
-          <button class="btn-circle btn btn-ghost">
+          <button class="btn-ghost btn-circle btn">
             <div ref="penColorRef" class="h-5 w-5 rounded-full bg-base-content" />
           </button>
-          <button class="btn-circle btn btn-ghost" @click.stop="clear()">
+          <button class="btn-ghost btn-circle btn" @click.stop="clear()">
             <component :is="icons.trash" class="text-base" />
           </button>
-          <button class="btn-circle btn btn-ghost" @click.stop="undo()">
+          <button class="btn-ghost btn-circle btn" @click.stop="undo()">
             <component :is="icons.arrowUturnLeft" class="text-base" />
           </button>
-          <button class="btn-circle btn btn-ghost" @click.stop="save()">
+          <button class="btn-ghost btn-circle btn" @click.stop="save()">
             <component :is="icons.arrowDownOnSquare" class="text-base" />
           </button>
         </div>
