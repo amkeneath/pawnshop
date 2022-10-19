@@ -30,6 +30,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.0.23",
     "signature_pad": "^4.0.10",
+    "ts-debounce": "^4.0.0",
     "v-dollar": "^0.1.0",
     "vue": "^3.2.40",
     "vue-chemistry": "^0.2.2",

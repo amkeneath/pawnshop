@@ -3,7 +3,7 @@
   "short_name": "Pawnshop",
   "description": "Pawnshop system",
   "background_color": "#121315",
-  "theme_color": "#FFBD9A",
+  "theme_color": "#121315",
   "display": "standalone",
   "start_url": "/?standalone=true",
   "icons": [
@@ -53,5 +53,6 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "display_override": ["window-controls-overlay"]
 }

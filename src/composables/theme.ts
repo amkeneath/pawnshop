@@ -5,7 +5,7 @@ const daisyuiThemes: string = import.meta.env.VITE_THEMES
 
 // DEFAULTS
 const THEMEPAIR_LIGHT = 'light'
-const THEMEPAIR_DARK = 'dark'
+const THEMEPAIR_DARK = 'dracula'
 
 const fullTheme = ref(false)
 
@@ -22,6 +22,7 @@ const themeSelector = 'html'
 const themeAttribute = 'data-theme'
 const themePair = ref({ valueLight: valueLightStorage.value, valueDark: valueDarkStorage.value })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
 const themeModes = themes.reduce((accumulator, value): any => ({ ...accumulator, [value]: value }), {})
 
 const theme = useColorMode({
@@ -36,7 +37,28 @@ let toggleDark = useToggle(isDark)
 
 const preferredDark = usePreferredDark()
 
-const themeColor = computed(() => (isDark.value ? '#FFBD9A' : '#C9BCFF'))
+let lastProp = '--b1'
+const getPropertyValue = (property: string): string => {
+  return `hsl(${getComputedStyle(document.querySelector('html') as HTMLElement)
+    ?.getPropertyValue(property)
+    .trim()
+    .split(' ')
+    .join(', ')})`
+}
+const themeColor = ref('')
+// const themeColor = computed(() => (isDark.value ? '#121315' : '#121315'))
+
+const setThemeColorByProp = (prop?: string): void => {
+  prop = prop || lastProp
+  const value = getPropertyValue(prop)
+  if (value) {
+    lastProp = prop
+    themeColor.value = value
+  }
+}
+
+setThemeColorByProp()
+
 const favicon = computed(() => (preferredDark.value ? 'favicon-dark.svg' : 'favicon.svg'))
 
 const setFavicon = useFavicon(favicon)
@@ -49,6 +71,7 @@ const setIsDark = (valueLight: string, valueDark: string): void => {
     ...themePair.value
   })
   toggleDark = useToggle(isDark)
+  setThemeColorByProp()
 }
 
 const setThemePair = (valueLight = checkedValueLight(), valueDark = checkedValueDark()): void => {
@@ -79,20 +102,21 @@ watch(
   { immediate: true }
 )
 
-const el = ref(document.querySelector(themeSelector))
-if (el) {
+const themeElement = ref(document.querySelector(themeSelector))
+if (themeElement) {
   useMutationObserver(
-    el,
+    themeElement,
     (mutations) => {
       if (mutations[0] && mutations[0].attributeName === themeAttribute) {
         const themeValue = theme.value as string
-        const currentTheme = el.value?.getAttribute(themeAttribute) as string
+        const currentTheme = themeElement.value?.getAttribute(themeAttribute) as string
         if (themes.includes(currentTheme)) {
           if (themeValue !== currentTheme && fullTheme.value) {
             setTheme(currentTheme as BasicColorSchema)
           }
+          setThemeColorByProp()
         } else {
-          el.value?.setAttribute(themeAttribute, themeValue)
+          themeElement.value?.setAttribute(themeAttribute, themeValue)
         }
       }
     },
@@ -108,6 +132,7 @@ export {
   preferredDark,
   setFavicon,
   setTheme,
+  setThemeColorByProp,
   setThemePair,
   theme,
   themeAttribute,

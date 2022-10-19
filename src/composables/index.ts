@@ -1,3 +1,6 @@
+export * from './controls-overlay'
+export * from './generate'
 export * from './network'
-export * from './numbers'
+export * from './number'
+export * from './string'
 export * from './theme'

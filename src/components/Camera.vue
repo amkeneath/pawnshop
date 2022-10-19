@@ -1,14 +1,5 @@
 <script setup lang="ts">
-// #region <WORKER NAVIGATOR>
-interface MediaDevices {
-  getDisplayMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>
-  getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>
-}
-
-interface XWorkerNavigator extends WorkerNavigator {
-  mediaDevices?: MediaDevices
-}
-// #endregion
+import { XWorkerNavigator } from '~/shims'
 
 interface Props {
   modelValue?: boolean
@@ -205,13 +196,13 @@ onMounted((): void => {
       </button>
     </div>
     <div
-      class="absolute top-0 left-full z-20 h-full w-full max-w-xs bg-black/70 py-4 px-2 shadow transition-all duration-500"
+      class="absolute top-0 left-full z-20 h-full w-full max-w-xs bg-black/70 py-4 px-2 shadow transition-all duration-300"
       :class="{ '-translate-x-full': sideMenu }"
     >
-      <ul tabindex="0" class="menu-compact menu h-full w-full">
+      <ul tabindex="0" class="menu menu-compact h-full w-full">
         <li v-for="(camera, idx) of cameras" :key="camera.deviceId" class="text-sm text-white/70">
           <a
-            class="items-start bg-transparent leading-5 transition-all duration-500 hover:text-white/90"
+            class="items-start bg-transparent leading-5 transition-all duration-300 hover:text-white/90"
             :class="{ '!text-white': idx === cameraIndex }"
             @click.stop="selectCamera(camera.deviceId)"
           >
@@ -221,7 +212,7 @@ onMounted((): void => {
         </li>
         <li v-for="(microphone, idx) of microphones" :key="microphone.deviceId" class="text-sm text-white/70">
           <a
-            class="bg-transparent transition-all duration-500 hover:text-white/90"
+            class="bg-transparent transition-all duration-300 hover:text-white/90"
             :class="{ '!text-white': idx === microphoneIndex }"
             @click.stop="selectMicrophone(microphone.deviceId)"
           >
@@ -230,21 +221,21 @@ onMounted((): void => {
           </a>
         </li>
         <li><div class="divider m-0 gap-0 before:bg-white/20 after:bg-white/20" /></li>
-        <li class="text-sm text-error">
-          <a class="bg-transparent transition-all duration-500 hover:text-white/90">
+        <li class="text-sm text-secondary">
+          <a class="bg-transparent transition-all duration-300 hover:text-white/90">
             <component :is="icons.play" class="flex-none" />
             Start
           </a>
         </li>
-        <li class="text-sm text-error">
-          <a class="bg-transparent transition-all duration-500 hover:text-white/90">
+        <li class="text-sm text-secondary">
+          <a class="bg-transparent transition-all duration-300 hover:text-white/90">
             <component :is="icons.stop" class="flex-none" />
             Stop
           </a>
         </li>
         <li class="grow opacity-0" />
         <li class="text-sm text-white/70">
-          <a class="bg-transparent transition-all duration-500 hover:text-white/90" @click="openSideMenu()">
+          <a class="bg-transparent transition-all duration-300 hover:text-white/90" @click="openSideMenu()">
             <component :is="icons.xMark" class="" />
           </a>
         </li>

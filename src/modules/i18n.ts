@@ -4,6 +4,7 @@ import { UserModule } from '~/types'
 
 const messages = Object.fromEntries(
   Object.entries(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
     import.meta.glob<{ default: any }>('../../locales/*.y(a)?ml', {
       eager: true
     })

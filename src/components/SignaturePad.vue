@@ -203,7 +203,7 @@ useResizeObserver(canvasRef, resizeCanvas)
     <div class="h-full w-full p-6">
       <canvas ref="canvasRef" class="absolute top-0 left-0 h-full w-full bg-base-200" />
       <header
-        class="card navbar flex flex-row gap-4 overflow-visible bg-base-100 text-base-content shadow transition-all duration-500"
+        class="navbar card flex flex-row gap-4 overflow-visible bg-base-100 text-base-content shadow transition-all duration-300"
         :class="{ 'opacity-0 -translate-y-full': drawing }"
       >
         <div class="navbar-start"></div>

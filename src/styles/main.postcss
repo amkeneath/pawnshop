@@ -1,4 +1,5 @@
 @import 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +8,7 @@
   @custom-selector :--heading h1, h2, h3, h4, h5, h6;
 
   html {
-    @apply font-baloo text-[1rem] leading-none;
+    @apply font-poppins text-[1rem] leading-none;
   }
 
   :--heading {
@@ -40,8 +41,16 @@
     @apply text-base font-normal;
   }
 
+  .disabled {
+    @apply opacity-60 pointer-events-none;
+  }
+
+  .content {
+    padding: env(safe-area-inset-top, 2rem) env(safe-area-inset-right, 2rem) env(safe-area-inset-bottom, 2rem) env(safe-area-inset-left, 2rem);
+  }
+
   .container {
-    @apply p-4 !max-w-none md:p-5 lg:p-6;
+    @apply p-4;
   }
 
   .title::before {
@@ -59,17 +68,56 @@
       border-radius: var(--rounded-prop) 0 0 var(--rounded-prop);
     }
   }
+
+  .draggable {
+    app-region: drag;
+  }
+
+  .non-draggable {
+    app-region: no-drag;
+  }
+
+  .draggable a,
+  .draggable button,
+  .draggable input,
+  .draggable label,
+  .draggable .btn {
+    @apply non-draggable;
+  }
+
+  #title-bar {
+    @apply fixed flex items-center draggable;
+
+    top: env(titlebar-area-y, 0);
+    left: env(titlebar-area-x, 0);
+    width: env(titlebar-area-width, 100%);
+    height: env(titlebar-area-height, 0);
+  }
+
+  .covered {
+    @apply pointer-events-none brightness-50;
+  }
+
+  .uncovered {
+    @apply pointer-events-auto;
+  }
+
+  .highlight-element {
+    box-shadow: 0 0 0 100vmax rgb(0 0 0 / 80%);
+  }
 }
 
 @layer components {
   .card {
-    @apply bg-base-200 drop-shadow container;
-  }
-}
+    @apply bg-neutral text-neutral-content shadow-none drop-shadow flex flex-col duration-300 overflow-hidden;
 
-@layer utilities {
-  .grid-cols-fit-sm {
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    &a {
+      @apply cursor-pointer;
+    }
+
+    &a:hover {
+      @apply bg-neutral-focus;
+    }
   }
 
   .card-bottom {
@@ -88,11 +136,61 @@
     @apply rounded-r-none;
   }
 
-  .rounded-btn {
-    border-radius: var(--rounded-btn) !important;
+  *:not([class^='btn']) {
+    @apply border-base-content/20;
   }
 
-  .animation-general {
-    transition-duration: var(--animation-general);
+  .btn-ghost {
+    @apply border-transparent;
+  }
+
+  .input,
+  .textarea,
+  .select {
+    @apply bg-base-200;
+  }
+
+  .input-bordered,
+  .textarea-bordered,
+  .select-bordered {
+    @apply border;
+  }
+
+  .input-group > *:not(:first-child) {
+    @apply !border-l-0;
+  }
+
+  .input-group > *:not(:last-child) {
+    @apply !border-r;
+  }
+
+  .input-group > span {
+    @apply bg-base-100 border border-base-content/20;
+  }
+}
+
+@layer utilities {
+  .w-titlebar {
+    width: env(titlebar-area-width, 2rem);
+  }
+
+  .h-titlebar {
+    height: env(titlebar-area-height, 2rem);
+  }
+
+  .top-titlebar {
+    top: env(titlebar-area-y, 0);
+  }
+
+  .left-titlebar {
+    left: env(titlebar-area-x, 0);
+  }
+
+  .grid-cols-fit-sm {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+
+  .grid-cols-fit-md {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
 }

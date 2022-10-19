@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import { debounce } from 'ts-debounce'
+
+import { XWorkerNavigator } from '~/shims'
+
+onMounted(() => {
+  setOverlay()
+  const xNavigator: XWorkerNavigator = navigator
+  if (xNavigator?.windowControlsOverlay) {
+    xNavigator.windowControlsOverlay.ongeometrychange = debounce(() => {
+      setOverlay()
+    }, 250)
+  }
+})
+
 useHead({
   title: 'Pawnshop',
   meta: [

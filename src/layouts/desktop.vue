@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BasicColorSchema } from '@vueuse/core'
+import { onBeforeRouteUpdate } from 'vue-router'
 
 interface SubMenu {
   name: string
@@ -197,7 +198,7 @@ setMenu()
         <li v-for="(item, idx) of menu" :key="item.route" class="parent-menu">
           <router-link
             :to="item.route"
-            class="relative flex h-10 w-10 items-center overflow-hidden rounded-lg text-xs text-primary transition-all duration-500"
+            class="relative flex h-10 w-10 items-center overflow-hidden rounded-lg text-xs text-primary transition-all duration-300"
             :class="{ 'active-menu': item.active }"
           >
             <component :is="item.icon" class="w-10 flex-none text-base" />
@@ -205,7 +206,7 @@ setMenu()
           </router-link>
 
           <div
-            class="sub-menu mt-2 max-h-0 w-64 overflow-hidden rounded-lg border border-neutral/30 bg-neutral/90 opacity-0 shadow transition-all duration-500"
+            class="sub-menu mt-2 max-h-0 w-64 overflow-hidden rounded-lg border border-neutral/30 bg-neutral/90 opacity-0 shadow transition-all duration-300"
             :class="`sub-menu-${idx + 1} min-w-fit`"
           >
             <ul class="p-4">
@@ -214,7 +215,7 @@ setMenu()
                 <span v-if="idx2 < item.sub.length - 1" class="absolute bottom-[-1px] right-full h-2/3 w-2 border-l-2 border-neutral-content" />
                 <router-link
                   :to="`${item.route}${subItem.route}`"
-                  class="z-10 flex items-center gap-2 whitespace-nowrap rounded-lg p-2 text-xs transition-all duration-500 hover:bg-primary/50 hover:text-primary-content"
+                  class="z-10 flex items-center gap-2 whitespace-nowrap rounded-lg p-2 text-xs transition-all duration-300 hover:bg-primary/50 hover:text-primary-content"
                   active-class="active-menu"
                 >
                   <component :is="subItem.icon" class="flex-none text-base" />
@@ -226,7 +227,7 @@ setMenu()
         </li>
       </ul>
       <div class="absolute left-0 bottom-4 flex w-full flex-col items-center justify-center gap-2">
-        <div class="text-error">
+        <div class="text-secondary">
           <component :is="icons.wifi" class="text-base" :class="{ 'text-success': online }" />
         </div>
         <input v-if="!fullTheme" type="checkbox" class="toggle-primary toggle" :checked="isDark" @change="toggleDark(!isDark)" />
@@ -234,17 +235,17 @@ setMenu()
           <button tabindex="0" class="btn-ghost btn-circle btn">
             <component :is="icons.briefcase" class="text-base" />
           </button>
-          <ul tabindex="0" class="rounded-box menu-compact dropdown-content menu mt-3 w-52 gap-1 bg-base-100 p-2 shadow">
+          <ul tabindex="0" class="dropdown-content menu rounded-box menu-compact mt-3 w-52 gap-1 bg-base-100 p-2 shadow">
             <li v-for="t of themes" :key="t" class="w-full">
               <a
                 :[themeAttribute]="t"
-                class="flex w-full items-center gap-2 bg-base-100 px-2 py-1 text-base-content transition-all duration-500 hover:bg-base-300"
+                class="flex w-full items-center gap-2 bg-base-100 px-2 py-1 text-base-content transition-all duration-300 hover:bg-base-300"
                 @click.stop="setTheme(t as BasicColorSchema)"
               >
                 <span class="label-text block flex-1 capitalize">{{ t }}</span>
                 <div class="flex h-2 flex-1 gap-1">
                   <div class="badge-primary badge h-full w-full grow text-xs capitalize text-primary-content" />
-                  <div class="badge-secondary badge h-full w-full grow text-xs capitalize text-secondary-content" />
+                  <div class="badge-accent badge h-full w-full grow text-xs capitalize text-accent-content" />
                   <div class="badge-accent badge h-full w-full grow text-xs capitalize text-accent-content" />
                   <div class="badge-neutral badge h-full w-full grow text-xs capitalize text-neutral-content" />
                 </div>

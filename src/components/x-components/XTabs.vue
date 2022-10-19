@@ -51,26 +51,15 @@ watch(
 
 <template>
   <div ref="tabsRef" class="tabs relative w-full flex-nowrap gap-8">
-    <a v-for="(item, idx) of props.items" :key="item.text" class="tab h-full px-0 py-3" :class="{ active: idx === model }" @click.stop="setActive(idx)">
+    <a v-for="(item, idx) of props.items" :key="item.text" class="tab h-full px-0 pb-3" :class="{ active: idx === model }" @click.stop="setActive(idx)">
       <h5>{{ item.text }}</h5>
     </a>
-    <span class="tabs-prop absolute left-0 bottom-0 block h-1 w-0 translate-x-1/2 bg-primary" :style="{ width: propWidth, left: propLeft }" />
+    <span class="absolute left-0 bottom-0 block h-1 w-0 translate-x-1/2 rounded-sm bg-primary duration-300" :style="{ width: propWidth, left: propLeft }" />
   </div>
 </template>
 
 <style lang="postcss" scoped>
-.tabs {
-  & .tabs-prop {
-    border-radius: var(--rounded-prop);
-    transition-duration: var(--animation-general);
-  }
-
-  & .tab {
-    transition-duration: var(--animation-general);
-
-    &.active {
-      @apply text-primary;
-    }
-  }
+.tab.active {
+  @apply text-primary;
 }
 </style>

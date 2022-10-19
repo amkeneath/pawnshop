@@ -20,17 +20,11 @@ const transform = computed(() => `translateX(calc(${active.value} * (-100% - ${g
 
 <template>
   <div class="tab-contents">
-    <div ref="contentWrapper" class="tab-content-wrapper flex gap-4" :style="{ transform }">
+    <div ref="contentWrapper" class="flex gap-4 duration-300" :style="{ transform }">
       <slot />
     </div>
   </div>
 </template>
-
-<style lang="postcss" scoped>
-.tab-contents > .tab-content-wrapper {
-  transition-duration: var(--animation-general);
-}
-</style>
 
 <style lang="postcss">
 .tab-contents .tab-content {

@@ -1,6 +1,6 @@
 import { clientsClaim, skipWaiting } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import { offlineFallback } from 'workbox-recipes'
+// import { offlineFallback } from 'workbox-recipes'
 import { setDefaultHandler } from 'workbox-routing'
 import { NetworkOnly } from 'workbox-strategies'
 
@@ -11,9 +11,9 @@ const assetHashes = self.__WB_MANIFEST
 setDefaultHandler(new NetworkOnly())
 
 // HTML to serve when the site is offline
-offlineFallback({
-  pageFallback: '/offline.html'
-})
+// offlineFallback({
+//   pageFallback: '/offline.html'
+// })
 
 cleanupOutdatedCaches()
 precacheAndRoute(assetHashes)
