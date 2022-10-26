@@ -2,6 +2,7 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const IconHeroiconsBoltSolid: typeof import('~icons/heroicons/bolt-solid')['default']
   const IconHeroiconsCheckSolid: typeof import('~icons/heroicons/check-solid')['default']
   const IconHeroiconsChevronDoubleDownSolid: typeof import('~icons/heroicons/chevron-double-down-solid')['default']
   const IconHeroiconsChevronDoubleUpSolid: typeof import('~icons/heroicons/chevron-double-up-solid')['default']
@@ -20,6 +21,7 @@ declare global {
   const IconHeroiconsTrashSolid: typeof import('~icons/heroicons/trash-solid')['default']
   const IconHeroiconsTruckSolid: typeof import('~icons/heroicons/truck-solid')['default']
   const IconHeroiconsUserSolid: typeof import('~icons/heroicons/user-solid')['default']
+  const IconHeroiconsWifi: typeof import('~icons/heroicons/wifi')['default']
   const IconHeroiconsXMarkSolid: typeof import('~icons/heroicons/x-mark-solid')['default']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
@@ -31,6 +33,7 @@ declare global {
   const computedWithControl: typeof import('@vueuse/core')['computedWithControl']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
+  const controlsOnRight: typeof import('./composables/controls-overlay')['controlsOnRight']
   const createApp: typeof import('vue')['createApp']
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
@@ -47,19 +50,25 @@ declare global {
   const defineStore: typeof import('pinia')['defineStore']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
+  const extendBeforeExtension: typeof import('./composables/string')['extendBeforeExtension']
   const extendRef: typeof import('@vueuse/core')['extendRef']
+  const extractNumbers: typeof import('./composables/string')['extractNumbers']
   const favicon: typeof import('./composables/theme')['favicon']
-  const fullTheme: typeof import('./composables/theme')['fullTheme']
+  const formattedDate: typeof import('./composables/date')['formattedDate']
   const generateId: typeof import('./composables/generate')['generateId']
   const getActivePinia: typeof import('pinia')['getActivePinia']
+  const getAddOrRemove: typeof import('./composables/string')['getAddOrRemove']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
-  const groupedDecimals: typeof import('./composables/number')['groupedDecimals']
+  const groupedDecimals: typeof import('./composables/string')['groupedDecimals']
   const h: typeof import('vue')['h']
+  const hslToHex: typeof import('./composables/string')['hslToHex']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
   const isDark: typeof import('./composables/theme')['isDark']
   const isDefined: typeof import('@vueuse/core')['isDefined']
+  const isOnline: typeof import('./composables/network')['isOnline']
+  const isOverlayVisible: typeof import('./composables/controls-overlay')['isOverlayVisible']
   const isProxy: typeof import('vue')['isProxy']
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
@@ -89,7 +98,6 @@ declare global {
   const onStartTyping: typeof import('@vueuse/core')['onStartTyping']
   const onUnmounted: typeof import('vue')['onUnmounted']
   const onUpdated: typeof import('vue')['onUpdated']
-  const online: typeof import('./composables/network')['online']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const preferredDark: typeof import('./composables/theme')['preferredDark']
   const provide: typeof import('vue')['provide']
@@ -106,13 +114,13 @@ declare global {
   const refDefault: typeof import('@vueuse/core')['refDefault']
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
+  const removeCustomFavIcon: typeof import('./composables/theme')['removeCustomFavIcon']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const setActivePinia: typeof import('pinia')['setActivePinia']
-  const setFavicon: typeof import('./composables/theme')['setFavicon']
+  const setCustomFavIcon: typeof import('./composables/theme')['setCustomFavIcon']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
-  const setOverlay: typeof import('./composables/controls-overlay')['setOverlay']
   const setTheme: typeof import('./composables/theme')['setTheme']
   const setThemeColorByProp: typeof import('./composables/theme')['setThemeColorByProp']
   const setThemePair: typeof import('./composables/theme')['setThemePair']
@@ -124,7 +132,6 @@ declare global {
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
   const theme: typeof import('./composables/theme')['theme']
-  const themeAttribute: typeof import('./composables/theme')['themeAttribute']
   const themeColor: typeof import('./composables/theme')['themeColor']
   const themePair: typeof import('./composables/theme')['themePair']
   const themes: typeof import('./composables/theme')['themes']
@@ -145,6 +152,7 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
+  const updateOverlay: typeof import('./composables/controls-overlay')['updateOverlay']
   const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
   const useArrayEvery: typeof import('@vueuse/core')['useArrayEvery']
   const useArrayFilter: typeof import('@vueuse/core')['useArrayFilter']
@@ -228,6 +236,7 @@ declare global {
   const useMouseInElement: typeof import('@vueuse/core')['useMouseInElement']
   const useMousePressed: typeof import('@vueuse/core')['useMousePressed']
   const useMutationObserver: typeof import('@vueuse/core')['useMutationObserver']
+  const useMyFetch: typeof import('./composables/fetch')['useMyFetch']
   const useNavigatorLanguage: typeof import('@vueuse/core')['useNavigatorLanguage']
   const useNetwork: typeof import('@vueuse/core')['useNetwork']
   const useNow: typeof import('@vueuse/core')['useNow']
@@ -316,6 +325,7 @@ import { UnwrapRef } from 'vue'
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly IconHeroiconsBoltSolid: UnwrapRef<typeof import('~icons/heroicons/bolt-solid')['default']>
     readonly IconHeroiconsCheckSolid: UnwrapRef<typeof import('~icons/heroicons/check-solid')['default']>
     readonly IconHeroiconsChevronDoubleDownSolid: UnwrapRef<typeof import('~icons/heroicons/chevron-double-down-solid')['default']>
     readonly IconHeroiconsChevronDoubleUpSolid: UnwrapRef<typeof import('~icons/heroicons/chevron-double-up-solid')['default']>
@@ -334,6 +344,7 @@ declare module '@vue/runtime-core' {
     readonly IconHeroiconsTrashSolid: UnwrapRef<typeof import('~icons/heroicons/trash-solid')['default']>
     readonly IconHeroiconsTruckSolid: UnwrapRef<typeof import('~icons/heroicons/truck-solid')['default']>
     readonly IconHeroiconsUserSolid: UnwrapRef<typeof import('~icons/heroicons/user-solid')['default']>
+    readonly IconHeroiconsWifi: UnwrapRef<typeof import('~icons/heroicons/wifi')['default']>
     readonly IconHeroiconsXMarkSolid: UnwrapRef<typeof import('~icons/heroicons/x-mark-solid')['default']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
@@ -345,6 +356,7 @@ declare module '@vue/runtime-core' {
     readonly computedWithControl: UnwrapRef<typeof import('@vueuse/core')['computedWithControl']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
+    readonly controlsOnRight: UnwrapRef<typeof import('./composables/controls-overlay')['controlsOnRight']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
@@ -361,19 +373,25 @@ declare module '@vue/runtime-core' {
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly extendBeforeExtension: UnwrapRef<typeof import('./composables/string')['extendBeforeExtension']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly extractNumbers: UnwrapRef<typeof import('./composables/string')['extractNumbers']>
     readonly favicon: UnwrapRef<typeof import('./composables/theme')['favicon']>
-    readonly fullTheme: UnwrapRef<typeof import('./composables/theme')['fullTheme']>
+    readonly formattedDate: UnwrapRef<typeof import('./composables/date')['formattedDate']>
     readonly generateId: UnwrapRef<typeof import('./composables/generate')['generateId']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getAddOrRemove: UnwrapRef<typeof import('./composables/string')['getAddOrRemove']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
-    readonly groupedDecimals: UnwrapRef<typeof import('./composables/number')['groupedDecimals']>
+    readonly groupedDecimals: UnwrapRef<typeof import('./composables/string')['groupedDecimals']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
+    readonly hslToHex: UnwrapRef<typeof import('./composables/string')['hslToHex']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isDark: UnwrapRef<typeof import('./composables/theme')['isDark']>
     readonly isDefined: UnwrapRef<typeof import('@vueuse/core')['isDefined']>
+    readonly isOnline: UnwrapRef<typeof import('./composables/network')['isOnline']>
+    readonly isOverlayVisible: UnwrapRef<typeof import('./composables/controls-overlay')['isOverlayVisible']>
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
@@ -403,7 +421,6 @@ declare module '@vue/runtime-core' {
     readonly onStartTyping: UnwrapRef<typeof import('@vueuse/core')['onStartTyping']>
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
-    readonly online: UnwrapRef<typeof import('./composables/network')['online']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly preferredDark: UnwrapRef<typeof import('./composables/theme')['preferredDark']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
@@ -420,13 +437,13 @@ declare module '@vue/runtime-core' {
     readonly refDefault: UnwrapRef<typeof import('@vueuse/core')['refDefault']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly removeCustomFavIcon: UnwrapRef<typeof import('./composables/theme')['removeCustomFavIcon']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
-    readonly setFavicon: UnwrapRef<typeof import('./composables/theme')['setFavicon']>
+    readonly setCustomFavIcon: UnwrapRef<typeof import('./composables/theme')['setCustomFavIcon']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
-    readonly setOverlay: UnwrapRef<typeof import('./composables/controls-overlay')['setOverlay']>
     readonly setTheme: UnwrapRef<typeof import('./composables/theme')['setTheme']>
     readonly setThemeColorByProp: UnwrapRef<typeof import('./composables/theme')['setThemeColorByProp']>
     readonly setThemePair: UnwrapRef<typeof import('./composables/theme')['setThemePair']>
@@ -438,7 +455,6 @@ declare module '@vue/runtime-core' {
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
     readonly theme: UnwrapRef<typeof import('./composables/theme')['theme']>
-    readonly themeAttribute: UnwrapRef<typeof import('./composables/theme')['themeAttribute']>
     readonly themeColor: UnwrapRef<typeof import('./composables/theme')['themeColor']>
     readonly themePair: UnwrapRef<typeof import('./composables/theme')['themePair']>
     readonly themes: UnwrapRef<typeof import('./composables/theme')['themes']>
@@ -459,6 +475,7 @@ declare module '@vue/runtime-core' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateOverlay: UnwrapRef<typeof import('./composables/controls-overlay')['updateOverlay']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
     readonly useArrayEvery: UnwrapRef<typeof import('@vueuse/core')['useArrayEvery']>
     readonly useArrayFilter: UnwrapRef<typeof import('@vueuse/core')['useArrayFilter']>
@@ -542,6 +559,7 @@ declare module '@vue/runtime-core' {
     readonly useMouseInElement: UnwrapRef<typeof import('@vueuse/core')['useMouseInElement']>
     readonly useMousePressed: UnwrapRef<typeof import('@vueuse/core')['useMousePressed']>
     readonly useMutationObserver: UnwrapRef<typeof import('@vueuse/core')['useMutationObserver']>
+    readonly useMyFetch: UnwrapRef<typeof import('./composables/fetch')['useMyFetch']>
     readonly useNavigatorLanguage: UnwrapRef<typeof import('@vueuse/core')['useNavigatorLanguage']>
     readonly useNetwork: UnwrapRef<typeof import('@vueuse/core')['useNetwork']>
     readonly useNow: UnwrapRef<typeof import('@vueuse/core')['useNow']>

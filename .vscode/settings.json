@@ -73,5 +73,8 @@
   "prettier.enable": false,
   "stylelint.snippet": ["css", "less", "postcss", "scss", "vue", "sass"],
   "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass"],
-  "tailwindCSS.emmetCompletions": true
+  "tailwindCSS.emmetCompletions": true,
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  }
 }

@@ -84,7 +84,7 @@ const onSnap = (): void => {
   if (!snapping.value) {
     let duration = 2000
     if (snapFrame.value) {
-      duration = parseFloat(window.getComputedStyle(snapFrame.value).transitionDuration) * 1000
+      duration = +window.getComputedStyle(snapFrame.value).transitionDuration * 1000
     }
     snapping.value = true
     setTimeout(() => {

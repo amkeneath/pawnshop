@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', () => {
   const usedNames = computed(() => Array.from(previousNames.value))
   const otherNames = computed(() => usedNames.value.filter((name) => name !== savedName.value))
 
-  const setNewName = (name: string): void => {
+  function setNewName(name: string): void {
     if (savedName.value) previousNames.value.add(savedName.value)
     savedName.value = name
   }

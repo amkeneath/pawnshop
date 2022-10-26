@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { generateId } from '~/composables/generate'
-import { toCamelCase } from '~/composables/string'
-
 interface Props {
   modelValue?: boolean
   on?: boolean

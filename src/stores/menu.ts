@@ -4,8 +4,8 @@ import { MenuItems } from '~/shims'
 
 export const useMenuStore = defineStore('menu', () => {
   // USE
-  const route = useRoute()
   const router = useRouter()
+  const route = useRoute()
 
   // STATICS
   const icon = {
@@ -25,18 +25,18 @@ export const useMenuStore = defineStore('menu', () => {
   ]
 
   // REFERENCES
-  const items = ref()
+  const _items = ref()
   const activeItemIndex = ref(-1)
 
   // COMPUTED
-  const finalItems = computed((): MenuItems => items.value || defaultItems)
+  const items = computed((): MenuItems => _items.value || defaultItems)
 
   // METHODS
   function updateActiveItem(path?: string): void {
     activeItemIndex.value = ((items.value || defaultItems) as MenuItems).findIndex(({ path: p }) => p === (path || route.path))
   }
   function setItems(menuItems?: MenuItems): void {
-    items.value = menuItems
+    _items.value = menuItems
     updateActiveItem()
   }
   function newLoan(event: Event): void {
@@ -50,7 +50,7 @@ export const useMenuStore = defineStore('menu', () => {
 
   return {
     activeItemIndex,
-    items: finalItems,
+    items,
     setItems,
     updateActiveItem
   }

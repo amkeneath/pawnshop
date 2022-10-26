@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { formattedDate } from '~/composables'
+
 interface PawnItem {
   item: string
   haveStones: boolean
@@ -43,27 +45,28 @@ const categories = [
   { text: 'Gadgets', icon: icon.devicePhoneMobile }
 ]
 
+// VUEUSE
+const { textarea: pawnDescriptionRef, input: pawnDescription } = useTextareaAutosize()
+
 // REACTIVE
 const loan = reactive({
   ticketNumber: '',
-  oldTicketNumber: '',
-  shortTerm: false,
+  loanDate: '',
+  maturityDate: '',
+  expiryDate: '',
   appraiseValue: 0,
-  firstMonth: 0,
-  otherMonth: 0,
-  liquidation: 0,
   principalAmount: 0,
-  interestAmount: 0,
-  serviceCharge: 0,
+  monthly: [0, 0],
+  liquidation: 0,
+  interestAmount: [0, 0],
+  serviceCharge: [0, 0],
   netProceeds: 0,
-  orNumber: '',
-  principal: 0,
-  interest: 0,
-  charge: 0,
-  amountPaid: 0,
   pawnDescription: '',
-  pawnItems: [] as Array<PawnItem>
+  pawnItems: [] as Array<PawnItem>,
+  pawnTypeId: '',
+  clientId: ''
 })
+
 const tablePawnItem = reactive({
   item: '',
   open: false,
@@ -102,20 +105,20 @@ const appraiseValue = computed(() => [...tablePawnItems.value].map((item) => ite
 const category = computed(() => categories[Math.min(Math.max(categoryIndex.value, 0), categories.length - 1)])
 const activePawnItem = computed(() => pawItems.value[Math.min(Math.max(activePawnItemIndex.value, 0), pawItems.value.length - 1)])
 
-// ACTIONS
-const tablePawnItemDescription = (item: TablePawnItem): string =>
-  item.haveStones ? `${item.stone} | ${item.purity} | ${groupedDecimals(item.weight, 2, 1)}${item.weightUnit.match(/\(([^)]+)\)/)?.[1]}` : 'No stones'
-
-const openSelectItem = (): void => {
+// METHODS
+function tablePawnItemDescription(item: TablePawnItem): string {
+  return item.haveStones ? `${item.stone} | ${item.purity} | ${groupedDecimals(item.weight, 2, 1)}${item.weightUnit.match(/\(([^)]+)\)/)?.[1]}` : 'No stones'
+}
+function openSelectItem(): void {
   selectPawnItems.value = true
 }
-const closeSelectItem = (): void => {
+function closeSelectItem(): void {
   selectPawnItems.value = false
 }
-const createPawnItem = (): void => {
+function createPawnItem(): void {
   //
 }
-const addPawnItem = (index: number): void => {
+function addPawnItem(index: number): void {
   activePawnItemIndex.value = index
   editPawnItem.value = true
 
@@ -127,50 +130,59 @@ const addPawnItem = (index: number): void => {
     tablePawnItemIndex.value = tablePawnItems.value.length - 1
   }
 }
-const confirmPawnItem = (): void => {
+function confirmPawnItem(): void {
   tablePawnItemIndex.value = -1
   editPawnItem.value = false
 }
-const removePawnItem = (): void => {
+function removePawnItem(): void {
   tablePawnItemIndex.value = -1
   editPawnItem.value = false
   tablePawnItems.value.splice(-1)
 }
-const editTablePawnItem = (index: number): void => {
+function editTablePawnItem(index: number): void {
   tablePawnItemIndex.value = index
   activePawnItemIndex.value = Math.max(
     0,
     pawItems.value?.findIndex(({ text }) => tablePawnItems.value?.[index]?.item === text)
   )
+  Object.assign(tablePawnItem, tablePawnItems.value[index])
   editPawnItem.value = true
 }
 
-const removeTablePawnItem = (index: number): void => {
+function removeTablePawnItem(index: number): void {
   tablePawnItems.value.splice(index, 1)
 }
-const toggleTablePawnItemDetails = (index: number): void => {
+function toggleTablePawnItemDetails(index: number): void {
   tablePawnItems.value[index].open = !tablePawnItems.value[index].open
 }
-const expandAllTablePawnItems = (expand = true): void => {
+function expandAllTablePawnItems(expand = true): void {
   tablePawnItems.value.forEach((item) => (item.open = expand))
 }
-const removeAllTablePawnItems = (): void => {
+function removeAllTablePawnItems(): void {
   tablePawnItems.value.splice(0)
 }
 
-const submitForm = (): void => {
+function submitForm(): void {
   loan.appraiseValue = appraiseValue.value
+  loan.pawnDescription = pawnDescription.value
   loan.pawnItems = [...tablePawnItems.value].map((tablePawnItem: TablePawnItem): PawnItem => {
     const item: TablePawnItem = { ...tablePawnItem }
     delete item.open
     return item as PawnItem
   })
 }
-// ACTIONS -> CLASSES
-const slideFromMenu = (state: boolean): string => `absolute right-full top-0 duration-300${state ? ' !right-0' : ''}`
+
+function slideFromMenu(state: boolean): string {
+  return `absolute right-full top-0 duration-300${state ? ' !right-0' : ''}`
+}
 
 // INITIALIZE
-setThemeColorByProp('--b1') // --n is neutral color
+setThemeColorByProp(controlsOnRight ? '--b1' : '--n') // --b1 is base-100 color
+
+const date = formattedDate().value
+loan.loanDate = date
+loan.maturityDate = date
+loan.expiryDate = date
 
 // WATCHERS
 watch(tablePawnItem, (newTablePawnItem) => {
@@ -180,11 +192,15 @@ watch(tablePawnItem, (newTablePawnItem) => {
 })
 </script>
 
+<route lang="yaml">
+name: new-loan
+</route>
+
 <template>
   <section class="flex h-full w-full">
     <div class="relative h-full w-1/2 overflow-hidden border-l">
       <x-section class="h-full w-full overflow-hidden rounded-tr-[3rem] bg-neutral text-neutral-content" hide-titlebar>
-        <div class="mb-2 flex h-12 items-center justify-between">
+        <div class="mb-4 flex h-14 items-center justify-between">
           <h3 class="flex items-center gap-1"><component :is="icon.star" v-if="false" class="text-primary" /> New Loan > {{ category.text }}</h3>
           <button class="btn-accent btn-circle btn" @click.stop="openSelectItem()"><component :is="icon.plus" /></button>
         </div>
@@ -295,7 +311,6 @@ watch(tablePawnItem, (newTablePawnItem) => {
           </tbody>
         </table>
         <div v-else class="card bg-base-100 p-4 shadow">No Items added</div>
-        <textarea form="loan" class="textarea-bordered textarea mt-4 w-full" placeholder="Pawn Description"></textarea>
       </x-section>
 
       <x-section
@@ -316,13 +331,13 @@ watch(tablePawnItem, (newTablePawnItem) => {
           >
             <component
               :is="pawItem.icon"
-              class="flex-NONE rounded-box h-20 w-20 flex-none scale-90 bg-neutral p-3 text-neutral-content duration-300"
+              class="rounded-box h-20 w-20 flex-none scale-90 bg-neutral p-3 text-neutral-content duration-300"
               :class="{ '!bg-primary !text-primary-content': idx === activePawnItemIndex }"
             />
             <span class="w-full duration-300" :class="{ 'text-primary': idx === activePawnItemIndex }">{{ pawItem.text }}</span>
           </a>
           <a class="card flex-row items-center gap-2 bg-accent text-accent-content" @click.stop="createPawnItem()">
-            <component :is="icon.plus" class="flex-NONE rounded-box h-20 w-20 flex-none scale-90 bg-neutral p-3 text-neutral-content duration-300" />
+            <component :is="icon.plus" class="rounded-box h-20 w-20 flex-none scale-90 bg-neutral p-3 text-neutral-content duration-300" />
             <span class="w-full duration-300">Add New</span>
           </a>
         </div>
@@ -384,23 +399,65 @@ watch(tablePawnItem, (newTablePawnItem) => {
             </div>
           </div>
 
-          <form id="loan" class="flex flex-1 flex-col gap-2" @submit.prevent="submitForm">
-            <input type="number" placeholder="Appraise Value" class="input-bordered input w-full" readonly :value="appraiseValue" />
-            <input type="number" placeholder="First Month (%)" class="input-bordered input w-full" />
-            <input type="number" placeholder="Other Month (%)" class="input-bordered input w-full" />
-            <input type="number" placeholder="Liquidation (%)" class="input-bordered input w-full" />
-            <input type="number" placeholder="Principal Amount" class="input-bordered input w-full" />
+          <form id="loan" class="form flex-1" @submit.prevent="submitForm">
             <label class="input-group w-full">
-              <span class="label-text w-full min-w-[132px] whitespace-nowrap">Interest Amount</span>
-              <input type="number" placeholder="" class="input-bordered input w-full" />
-              <input type="number" placeholder="" class="input-bordered input w-full" />
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Ticket No.</span>
+              <input v-model="loan.ticketNumber" type="text" placeholder="Ticket Number" class="input-bordered input w-2/3" />
             </label>
             <label class="input-group w-full">
-              <span class="label-text w-full min-w-[132px] whitespace-nowrap">Service Charge</span>
-              <input type="number" placeholder="" class="input-bordered input w-full" />
-              <input type="number" placeholder="" class="input-bordered input w-full" />
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Loan Date</span>
+              <input v-model="loan.loanDate" type="date" placeholder="Loan Date" class="input-bordered input w-2/3" />
             </label>
-            <input type="number" placeholder="Net Proceeds" class="input-bordered input w-full" />
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Maturity Date</span>
+              <input v-model="loan.maturityDate" type="date" placeholder="Maturity Date" class="input-bordered input w-2/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Expiry Date</span>
+              <input v-model="loan.expiryDate" type="date" placeholder="Expiry Date" class="input-bordered input w-2/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Appraise Value</span>
+              <input type="number" placeholder="Appraise Value" class="input-bordered input w-2/3" readonly :value="appraiseValue" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Principal Amount</span>
+              <input v-model="loan.principalAmount" type="number" placeholder="Principal Amount" class="input-bordered input w-2/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Monthly (%)</span>
+              <input v-model="loan.monthly[0]" type="number" placeholder="First Month" class="input-bordered input w-1/3" />
+              <input v-model="loan.monthly[1]" type="number" placeholder="Other Month" class="input-bordered input w-1/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Liquidation (%)</span>
+              <input v-model="loan.liquidation" type="number" placeholder="Liquidation (%)" class="input-bordered input w-2/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Interest Amount</span>
+              <input v-model="loan.interestAmount[0]" type="number" placeholder="" class="input-bordered input w-1/3" />
+              <input v-model="loan.interestAmount[1]" type="number" placeholder="" class="input-bordered input w-1/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Service Charge</span>
+              <input v-model="loan.serviceCharge[0]" type="number" placeholder="" class="input-bordered input w-1/3" />
+              <input v-model="loan.serviceCharge[1]" type="number" placeholder="" class="input-bordered input w-1/3" />
+            </label>
+            <label class="input-group w-full">
+              <span class="label-text w-1/3 min-w-[132px] whitespace-nowrap">Net Proceeds</span>
+              <input v-model="loan.netProceeds" type="number" placeholder="Net Proceeds" class="input-bordered input w-2/3" />
+            </label>
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text">Pawn Description</span>
+              </label>
+              <textarea
+                ref="pawnDescriptionRef"
+                v-model="pawnDescription"
+                class="textarea-bordered textarea w-full resize-none overflow-hidden"
+                placeholder="Pawn Description"
+              />
+            </div>
           </form>
         </div>
       </x-section>

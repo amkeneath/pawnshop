@@ -69,24 +69,8 @@
     }
   }
 
-  .draggable {
-    app-region: drag;
-  }
-
-  .non-draggable {
-    app-region: no-drag;
-  }
-
-  .draggable a,
-  .draggable button,
-  .draggable input,
-  .draggable label,
-  .draggable .btn {
-    @apply non-draggable;
-  }
-
-  #title-bar {
-    @apply fixed flex items-center draggable;
+  .windows-overlay {
+    @apply fixed flex items-center;
 
     top: env(titlebar-area-y, 0);
     left: env(titlebar-area-x, 0);
@@ -94,16 +78,27 @@
     height: env(titlebar-area-height, 0);
   }
 
-  .covered {
-    @apply pointer-events-none brightness-50;
-  }
-
-  .uncovered {
-    @apply pointer-events-auto;
+  .draggable a,
+  .draggable button,
+  .draggable input,
+  .draggable label,
+  .draggable .btn {
+    app-region: no-drag;
   }
 
   .highlight-element {
-    box-shadow: 0 0 0 100vmax rgb(0 0 0 / 80%);
+    @apply pointer-events-auto;
+
+    z-index: 100;
+    box-shadow: 0 0 0 100vmax rgb(0 0 0 / 60%);
+  }
+
+  .svg-primary {
+    @apply;
+  }
+
+  .form {
+    @apply flex flex-col gap-4;
   }
 }
 
@@ -170,6 +165,14 @@
 }
 
 @layer utilities {
+  .draggable {
+    app-region: drag;
+  }
+
+  .non-draggable {
+    app-region: no-drag;
+  }
+
   .w-titlebar {
     width: env(titlebar-area-width, 2rem);
   }
@@ -186,11 +189,27 @@
     left: env(titlebar-area-x, 0);
   }
 
+  .grid-cols-fit-xm {
+    grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
+  }
+
   .grid-cols-fit-sm {
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+  }
+
+  .grid-cols-fit {
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
   }
 
   .grid-cols-fit-md {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+
+  .grid-cols-fit-lg {
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  }
+
+  .grid-cols-fit-xl {
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
 }

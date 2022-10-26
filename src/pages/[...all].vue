@@ -1,4 +1,5 @@
 <route lang="yaml">
+name: not-found
 meta:
   layout: 404
 </route>

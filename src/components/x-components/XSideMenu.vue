@@ -21,7 +21,9 @@ const emit = defineEmits<Emits>()
 // STATICS
 const icon = {
   sun: markRaw(IconHeroiconsSunSolid),
-  moon: markRaw(IconHeroiconsMoonSolid)
+  moon: markRaw(IconHeroiconsMoonSolid),
+  bolt: markRaw(IconHeroiconsBoltSolid),
+  wifi: markRaw(IconHeroiconsWifi)
 }
 
 // REFERENCES
@@ -36,7 +38,7 @@ function itemClicked(idx = -1): void {
 function setActiveItemOffsetTop(): void {
   if (menu.value)
     nextTick(() => {
-      activeItemOffsetTop.value = activeItemIndex.value !== -1 ? `${menu?.value?.querySelector('.active')?.parentElement?.offsetTop || '0'}px` : '0'
+      activeItemOffsetTop.value = ~activeItemIndex.value ? `${menu?.value?.querySelector('.active')?.parentElement?.offsetTop || '0'}px` : '0'
     })
 }
 
@@ -55,23 +57,22 @@ onMounted(() => {
   <nav class="draggable flex h-full w-20 flex-none flex-col justify-between bg-neutral text-neutral-content">
     <!-- TOP -->
     <div class="flex h-20 flex-col items-center justify-center px-6 py-4">
-      <img class="hidden w-full" src="/logo.png" alt="Pawnshop Logo" />
+      <logo />
     </div>
     <!-- MIDDLE -->
     <div class="flex w-full flex-col justify-center">
       <ul v-if="items" ref="menu" class="menu relative flex w-full flex-col flex-nowrap duration-300" :class="{ '-translate-x-3/4': hideItems }">
-        <span
-          class="menu-prop absolute flex h-[64px] w-full duration-300"
-          :class="{ '!opacity-0': activeItemIndex === -1 }"
-          :style="{ top: activeItemOffsetTop }"
-        >
+        <span class="menu-prop absolute flex h-[64px] w-full duration-300" :class="{ '!opacity-0': !~activeItemIndex }" :style="{ top: activeItemOffsetTop }">
           <span class="my-auto h-12 w-2 rounded-r-lg bg-primary"></span>
         </span>
         <li v-for="(item, idx) of items" :key="idx" :class="{ 'px-6 py-4': !item.isDivider }">
           <router-link
             v-if="!item.isDivider"
             class="!aspect-1 h-full w-full cursor-pointer rounded-lg !p-0 transition-all duration-300"
-            :class="{ active: activeItemIndex === idx, 'action-menu': item.isAction }"
+            :class="{
+              'active text-primary bg-transparent': activeItemIndex === idx,
+              'bg-accent text-accent-content rounded-lg hover:bg-accent-focus': item.isAction
+            }"
             :title="item.isDivider ? 'Menu Divider' : item.text || 'Menu Item'"
             :to="item.path || ''"
             @click.stop="item.isAction ? item.action?.($event) : itemClicked(idx)"
@@ -83,22 +84,9 @@ onMounted(() => {
       </ul>
     </div>
     <!-- BOTTOM -->
-    <div class="flex min-h-[5rem] flex-col items-center justify-center px-6 py-4">
-      <x-switch :icon="(icon.moon as any)" :alt-icon="(icon.sun as any)" vertical :on="isDark" class="border before:!bg-accent" @toggle="toggleDark(!isDark)" />
+    <div class="flex min-h-[5rem] flex-col items-center justify-center gap-4 px-6 py-4">
+      <component :is="icon.wifi" v-if="!isOverlayVisible" :class="isOnline ? 'text-success' : 'text-error'" />
+      <x-switch :icon="icon.moon" :alt-icon="icon.sun" vertical :on="isDark" class="border before:!bg-accent" @toggle="toggleDark(!isDark)" />
     </div>
   </nav>
 </template>
-
-<style lang="postcss" scoped>
-.active {
-  @apply text-primary bg-transparent;
-}
-
-.action-menu {
-  @apply bg-accent text-accent-content rounded-lg;
-
-  &:hover {
-    @apply bg-accent-focus;
-  }
-}
-</style>

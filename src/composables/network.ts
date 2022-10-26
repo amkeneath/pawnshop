@@ -1,4 +1,3 @@
-// these APIs are auto-imported from @vueuse/core
-const online = useOnline()
+const isOnline = useOnline()
 
-export { online }
+export { isOnline }

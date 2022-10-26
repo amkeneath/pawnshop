@@ -19,13 +19,19 @@ watch(route, () => {
 onBeforeMount(() => {
   menu.updateActiveItem()
 })
+const icon = {
+  wifi: markRaw(IconHeroiconsWifi),
+  menu
+}
 </script>
 
 <template>
-  <main class="bg-base-100 text-base-content">
-    <div v-if="false" id="title-bar" />
+  <main class="justify-end bg-base-100 text-base-content">
+    <div v-if="isOverlayVisible" id="title-bar" class="windows-overlay items-center duration-300" :class="{ 'justify-end pl-4': controlsOnRight }">
+      <component :is="icon.wifi" :class="[isOnline ? 'text-success' : 'text-error']"></component>
+    </div>
     <div class="content flex h-screen w-screen overflow-hidden">
-      <side-menu :active-item-index="activeItemIndex" :items="items" />
+      <x-side-menu :active-item-index="activeItemIndex" :items="items" />
       <!-- ROUTER VIEW -->
       <router-view class="max-h-full w-full" />
     </div>

@@ -1,100 +1,162 @@
 import { BasicColorSchema } from '@vueuse/core'
 
-// these APIs are auto-imported from @vueuse/core
+import { extendBeforeExtension, extractNumbers } from './string'
+
+type ThemeMode = 'auto' | 'light' | 'dark'
+
 const daisyuiThemes: string = import.meta.env.VITE_THEMES
 
 // DEFAULTS
-const THEMEPAIR_LIGHT = 'light'
-const THEMEPAIR_DARK = 'dracula'
+const NO_THEME = 'NO-THEME'
+const THEME_PAIR_DARK = 'dracula'
+const THEME_PAIR_LIGHT = 'light'
+const THEME_MODE: ThemeMode = 'auto'
+const FAVICON = 'favicon.svg'
 
-const fullTheme = ref(false)
-
-const themes = daisyuiThemes.split(' ').map((theme: string) => theme.trim())
-
-const checkedValue = (value: string, defaultValue: string): string => (themes.includes(value) ? value : defaultValue)
-const checkedValueLight = (value = THEMEPAIR_LIGHT): string => checkedValue(value, THEMEPAIR_LIGHT)
-const checkedValueDark = (value = THEMEPAIR_DARK): string => checkedValue(value, THEMEPAIR_DARK)
-
-const valueLightStorage = useLocalStorage('themepair-light', checkedValueLight())
-const valueDarkStorage = useLocalStorage('themepair-dark', checkedValueDark())
-
+// STATICS
 const themeSelector = 'html'
 const themeAttribute = 'data-theme'
-const themePair = ref({ valueLight: valueLightStorage.value, valueDark: valueDarkStorage.value })
-
+const themeModeAttribute = 'data-theme-mode'
+const themes = daisyuiThemes.split(' ').map((theme: string) => theme.trim())
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
 const themeModes = themes.reduce((accumulator, value): any => ({ ...accumulator, [value]: value }), {})
 
-const theme = useColorMode({
-  selector: themeSelector,
-  attribute: themeAttribute,
-  modes: themeModes
-})
-let isDark = useDark()
+// HELPER METHODS
+function checkedValue(value: string, defaultValue = themes[0]): string {
+  return themes.includes(value) ? value : themes.includes(defaultValue) ? defaultValue : themes.length > 0 ? themes[0] : NO_THEME
+}
+function checkedValueDark(value = THEME_PAIR_DARK): string {
+  return checkedValue(value, THEME_PAIR_DARK)
+}
+function checkedValueLight(value = THEME_PAIR_LIGHT): string {
+  return checkedValue(value, THEME_PAIR_LIGHT)
+}
 
-const setTheme = useToggle(theme)
-let toggleDark = useToggle(isDark)
+// STORAGE
+const valueDarkStorage = useLocalStorage('themepair-dark', checkedValueDark())
+const valueLightStorage = useLocalStorage('themepair-light', checkedValueLight())
+const themeStorage = useLocalStorage(themeAttribute, '')
+const themeModeStorage = useLocalStorage(themeModeAttribute, THEME_MODE)
+
+// STATE
+let lastProp = '--b1'
+
+// REFERENCES
+const themePair = computed(() => ({ valueDark: valueDarkStorage.value, valueLight: valueLightStorage.value }))
+const themeColor = ref('')
+
+// FAVICON
+const customFavicon = useFavicon()
+const favicon = computed((): string => extendBeforeExtension(customFavicon.value || FAVICON, preferredDark ? '-dark' : ''))
 
 const preferredDark = usePreferredDark()
 
-let lastProp = '--b1'
-const getPropertyValue = (property: string): string => {
-  return `hsl(${getComputedStyle(document.querySelector('html') as HTMLElement)
-    ?.getPropertyValue(property)
-    .trim()
-    .split(' ')
-    .join(', ')})`
-}
-const themeColor = ref('')
-// const themeColor = computed(() => (isDark.value ? '#121315' : '#121315'))
+// THEME
+const theme = useColorMode({
+  selector: themeSelector,
+  attribute: themeAttribute,
+  storageKey: themeAttribute,
+  modes: themeModes
+})
+const _setTheme = useToggle(theme)
 
-const setThemeColorByProp = (prop?: string): void => {
-  prop = prop || lastProp
-  const value = getPropertyValue(prop)
-  if (value) {
-    lastProp = prop
-    themeColor.value = value
+// LIGHT AND DARK TOGGLE
+const isDark = useDark({
+  selector: themeSelector,
+  attribute: themeModeAttribute,
+  storageKey: themeModeAttribute,
+  onChanged(dark: boolean) {
+    const { valueDark, valueLight } = themePair.value
+    _setTheme((dark ? valueDark : valueLight) as BasicColorSchema)
+    const element = document.querySelector(themeSelector)
+    element?.setAttribute(this.attribute || '', localStorage.getItem(this.storageKey || '') || '')
+    element?.classList[getAddOrRemove(dark)]('dark')
   }
+})
+const toggleDark = useToggle(isDark)
+
+// METHODS
+function isValidThemeMode(themeMode?: string): boolean {
+  // return themeMode === 'auto' || themeMode === (preferredDark.value ? 'light' : 'dark')
+  return themeMode === 'auto' || themeMode === 'dark' || themeMode === 'light'
 }
-
-setThemeColorByProp()
-
-const favicon = computed(() => (preferredDark.value ? 'favicon-dark.svg' : 'favicon.svg'))
-
-const setFavicon = useFavicon(favicon)
-
-const setIsDark = (valueLight: string, valueDark: string): void => {
-  themePair.value = { valueLight: checkedValueLight(valueLight), valueDark: checkedValueDark(valueDark) }
-  isDark = useDark({
-    selector: themeSelector,
-    attribute: themeAttribute,
-    ...themePair.value
-  })
-  toggleDark = useToggle(isDark)
-  setThemeColorByProp()
+function setCustomFavIcon(favicon: string): void {
+  customFavicon.value = favicon
 }
-
-const setThemePair = (valueLight = checkedValueLight(), valueDark = checkedValueDark()): void => {
+function removeCustomFavIcon(): void {
+  customFavicon.value = undefined
+}
+function setTheme(theme: BasicColorSchema): void {
+  const { valueLight: light, valueDark: dark } = themePair.value
+  if (theme === light || theme === dark) toggleDark(theme === dark)
+  else _setTheme(checkedValue(theme) as BasicColorSchema)
+}
+function setThemePair(valueLight?: string, valueDark?: string): void {
   if (valueLight !== valueLightStorage.value) {
-    valueLightStorage.value = valueLight
+    valueLightStorage.value = checkedValueLight(valueLight)
   }
   if (valueDark !== valueDarkStorage.value) {
-    valueDarkStorage.value = valueDark
+    valueDarkStorage.value = checkedValueDark(valueDark)
   }
+}
+// Accepts css prop e.g. --b1
+function setThemeColorByProp(prop?: string): void {
+  nextTick(() => {
+    prop = prop || lastProp
+    const value = getComputedStyle(document.querySelector(themeSelector) as HTMLElement)?.getPropertyValue(prop)
+    if (value) {
+      lastProp = prop
+      themeColor.value = hslToHex(...extractNumbers(value))
+    }
+  })
+}
+
+// INITIALIZE
+setThemeColorByProp()
+
+// WATCHERS AND OBSERVERS
+const themeElement = ref(document.querySelector(themeSelector))
+if (themeElement) {
+  useMutationObserver(
+    themeElement,
+    (mutations) => {
+      // if (mutations[0] && mutations[0].attributeName === themeAttribute) setThemeColorByProp()
+      if (mutations[0]) setThemeColorByProp()
+    },
+    { attributes: true }
+  )
 }
 
 watch(
-  [valueLightStorage, valueDarkStorage],
-  ([newValueLight, newValueDark], [oldValueLight, oldValueDark]) => {
-    if (newValueLight !== oldValueLight || newValueDark !== oldValueDark) {
-      if (themes.includes(newValueLight) && themes.includes(newValueDark)) {
-        setIsDark(newValueLight, newValueDark)
+  [themeModeStorage, themePair, themeStorage],
+  ([newThemeMode, newThemepair, newTheme], [oldThemeMode, oldThemepair, oldTheme]) => {
+    // THEME MODE
+    if (newThemeMode !== oldThemeMode && !isValidThemeMode(newThemeMode)) {
+      setTimeout(() => {
+        themeModeStorage.value = 'light'
+      }, 20)
+    }
+
+    // THEME
+    if (newTheme !== oldTheme && !themes.includes(newTheme)) {
+      setTimeout(() => {
+        themeStorage.value = checkedValue(oldTheme || NO_THEME)
+        document.querySelector(themeSelector)?.setAttribute(themeAttribute, themeStorage.value)
+      }, 20)
+    }
+
+    // THEME PAIR
+    const { valueDark: newValueDark, valueLight: newValueLight } = newThemepair
+    const { valueDark: oldValueDark, valueLight: oldValueLight } = oldThemepair || { valueDark: undefined, valueLight: undefined }
+    if (newValueDark !== oldValueDark || newValueLight !== oldValueLight) {
+      if (!themes.includes(newValueDark)) {
+        valueDarkStorage.value = checkedValueDark(oldValueDark)
+      } else if (!themes.includes(newValueLight)) {
+        valueLightStorage.value = checkedValueLight(oldValueLight)
       } else {
-        if (!themes.includes(newValueLight)) {
-          valueLightStorage.value = checkedValueLight()
-        }
-        if (!themes.includes(newValueDark)) {
-          valueDarkStorage.value = checkedValueDark()
+        const newTheme = isDark.value ? checkedValueDark(newValueDark) : checkedValueLight(newValueLight)
+        if (newTheme !== theme.value) {
+          _setTheme(newTheme as BasicColorSchema)
         }
       }
     }
@@ -102,42 +164,20 @@ watch(
   { immediate: true }
 )
 
-const themeElement = ref(document.querySelector(themeSelector))
-if (themeElement) {
-  useMutationObserver(
-    themeElement,
-    (mutations) => {
-      if (mutations[0] && mutations[0].attributeName === themeAttribute) {
-        const themeValue = theme.value as string
-        const currentTheme = themeElement.value?.getAttribute(themeAttribute) as string
-        if (themes.includes(currentTheme)) {
-          if (themeValue !== currentTheme && fullTheme.value) {
-            setTheme(currentTheme as BasicColorSchema)
-          }
-          setThemeColorByProp()
-        } else {
-          themeElement.value?.setAttribute(themeAttribute, themeValue)
-        }
-      }
-    },
-    { attributes: true }
-  )
-}
-
-const readonlyThemePair = readonly(themePair)
+// EXPORTS
+const _themeColor = readonly(themeColor)
 export {
   favicon,
-  fullTheme,
   isDark,
   preferredDark,
-  setFavicon,
+  removeCustomFavIcon,
+  setCustomFavIcon,
   setTheme,
   setThemeColorByProp,
   setThemePair,
   theme,
-  themeAttribute,
-  themeColor,
-  readonlyThemePair as themePair,
+  _themeColor as themeColor,
+  themePair,
   themes,
   toggleDark
 }

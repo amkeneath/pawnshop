@@ -1,24 +1,23 @@
-import { XWorkerNavigator } from '~/shims'
+import { WorkerNavigator } from '~/shims'
 
-const setOverlay = (): void => {
-  const xNavigator: XWorkerNavigator = navigator
-  if (xNavigator?.windowControlsOverlay?.visible) {
-    document.querySelector('#title-bar')?.classList.remove('hidden')
-    document.querySelectorAll('.h-titlebar')?.forEach((element) => {
-      element.classList.remove('hidden')
-    })
-  } else {
-    document.querySelector('#title-bar')?.classList.add('hidden')
-    document.querySelectorAll('.h-titlebar')?.forEach((element) => {
-      element.classList.add('hidden')
-    })
-  }
-  if (xNavigator?.windowControlsOverlay?.getTitlebarAreaRect) {
-    const { x } = xNavigator.windowControlsOverlay.getTitlebarAreaRect()
-    if (x !== 0) {
-      document.querySelector('#title-bar')?.classList.add('controls-left')
-    }
-  }
+import { getAddOrRemove } from './string'
+
+const _navigator: WorkerNavigator = navigator
+
+// REFERENCES
+const isOverlayVisible = ref(false)
+const controlsOnRight = ref(false)
+
+// METHODS
+function updateOverlay(): void {
+  isOverlayVisible.value = !!_navigator.windowControlsOverlay?.visible
+  const onRight = (controlsOnRight.value = _navigator.windowControlsOverlay?.getTitlebarAreaRect?.()?.x === 0)
+  document.querySelector('#title-bar')?.classList[getAddOrRemove(onRight)]('controls-on-right')
 }
 
-export { setOverlay }
+// INITIALIZE
+updateOverlay()
+
+// EXPORT
+const _isOverlayVisible = readonly(isOverlayVisible)
+export { controlsOnRight, _isOverlayVisible as isOverlayVisible, updateOverlay }

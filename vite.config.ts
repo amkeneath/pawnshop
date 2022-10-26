@@ -44,7 +44,25 @@ export default defineConfig(({ mode }) => {
         reactivityTransform: true
       }),
       pages({
-        extensions: ['vue', 'md']
+        extensions: ['vue', 'md'],
+        extendRoute(route, parent) {
+          if (route.path === '/' || route.path === '/login') {
+            // Index is unauthenticated.
+            return route
+          } else if (route.path === '/login') {
+            route.meta = { middleware: ['guest'] }
+            console.log('route')
+            return route
+          }
+
+          // Augment the route with meta that indicates that the route requires authentication.
+          return {
+            ...route,
+            meta: {
+              middleware: ['auth']
+            }
+          }
+        }
       }),
       layouts(),
       components({
@@ -71,7 +89,7 @@ export default defineConfig(({ mode }) => {
       }),
       pwa({
         strategies: 'injectManifest',
-        includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-dark.svg', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
+        includeAssets: ['favicon.svg', 'favicon-dark.svg', 'robots.txt', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
         srcDir: 'src',
         filename: 'sw.ts',
         registerType: 'autoUpdate',

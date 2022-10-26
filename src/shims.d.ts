@@ -1,3 +1,4 @@
+// these APIs are auto-imported from @vueuse/core
 import { PrecacheEntry } from 'workbox-precaching'
 
 // #region <WINDOW>
@@ -20,16 +21,18 @@ declare interface WindowControlsOverlay {
   ongeometrychange(): void
   visible: boolean
 }
-export declare interface XWorkerNavigator extends WorkerNavigator {
+export declare interface WorkerNavigator extends WorkerNavigator {
   mediaDevices?: MediaDevices
   windowControlsOverlay?: WindowControlsOverlay
 }
 // #endregion
 
+export declare type Icon = object
+
 // #region <MENU ITEM>
 export declare type MenuItemAction = (event: Event) => void
 export declare interface MenuItem {
-  icon?: unknown
+  icon?: Icon
   text?: string
   path?: string
   action?: MenuItemAction
@@ -38,3 +41,8 @@ export declare interface MenuItem {
 }
 export declare type MenuItems = Array<MenuItem>
 // #endregion
+
+export declare interface AuthData {
+  username: string
+  password: string
+}

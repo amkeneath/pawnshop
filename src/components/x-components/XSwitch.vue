@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { generateId } from '~/composables/generate'
-import { toCamelCase } from '~/composables/string'
+import { Icon } from '~/shims'
 
 interface Props {
   modelValue?: boolean
   on?: boolean
-  icon?: unknown
-  altIcon?: unknown
+  icon?: Icon
+  altIcon?: Icon
   vertical?: boolean
 }
 interface Emits {

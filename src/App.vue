@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import { debounce } from 'ts-debounce'
 
-import { XWorkerNavigator } from '~/shims'
-
-onMounted(() => {
-  setOverlay()
-  const xNavigator: XWorkerNavigator = navigator
-  if (xNavigator?.windowControlsOverlay) {
-    xNavigator.windowControlsOverlay.ongeometrychange = debounce(() => {
-      setOverlay()
-    }, 250)
-  }
-})
+import { WorkerNavigator } from '~/shims'
 
 useHead({
   title: 'Pawnshop',
@@ -22,8 +12,18 @@ useHead({
   ],
   link: [
     { rel: 'apple-touch-icon', type: 'image/svg+xml', href: '/images/pwa/icon-192x192.png' },
-    { rel: 'icon', type: 'image/svg+xml', href: favicon }
+    { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    { rel: 'mask-icon', type: 'image/svg+xml', href: '/safari-pinned-tab.svg', color: themeColor } as any
   ]
+})
+
+onMounted(() => {
+  // ADD LISTENER
+  const _navigator: WorkerNavigator = navigator
+  if (_navigator?.windowControlsOverlay)
+    _navigator.windowControlsOverlay.ongeometrychange = debounce(() => {
+      updateOverlay()
+    }, 200)
 })
 </script>
 
