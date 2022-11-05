@@ -41,17 +41,21 @@ export default defineConfig(({ mode }) => {
       preview(),
       vue({
         include: [/\.vue$/, /\.md$/],
-        reactivityTransform: true
+        reactivityTransform: true,
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => ['modal'].includes(tag)
+          }
+        }
       }),
       pages({
         extensions: ['vue', 'md'],
         extendRoute(route, parent) {
-          if (route.path === '/' || route.path === '/login') {
-            // Index is unauthenticated.
-            return route
-          } else if (route.path === '/login') {
-            route.meta = { middleware: ['guest'] }
-            console.log('route')
+          if (route.path === '/login') {
+            route.meta = {
+              ...route.meta,
+              middleware: ['guest']
+            }
             return route
           }
 
@@ -59,6 +63,7 @@ export default defineConfig(({ mode }) => {
           return {
             ...route,
             meta: {
+              ...route.meta,
               middleware: ['auth']
             }
           }

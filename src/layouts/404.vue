@@ -1,7 +1,13 @@
 <script setup lang="ts">
-const router = useRouter()
-
+// USE
 const { t } = useI18n()
+const router = useRouter()
+const route = useRoute()
+
+// WATCHERS
+watch(route, () => {
+  setThemeColorByProp('--b1')
+})
 </script>
 
 <route lang="yaml">
@@ -10,7 +16,7 @@ meta:
 </route>
 
 <template>
-  <main class="px-4 py-10 text-center text-teal-700 dark:text-gray-200">
+  <main class="px-4 py-10 text-center">
     <div>
       <p class="mt-4 text-4xl">
         <carbon-warning class="inline-block" />

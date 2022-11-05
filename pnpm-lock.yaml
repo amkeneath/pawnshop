@@ -32,6 +32,7 @@ specifiers:
   eslint-plugin-tailwindcss: ^3.6.2
   eslint-plugin-vue: ^9.6.0
   https-localhost: ^4.7.1
+  loadash: ^1.0.0
   nprogress: ^0.2.0
   pinia: ^2.0.23
   pnpm: ^7.13.4
@@ -84,6 +85,7 @@ dependencies:
   '@vueuse/core': 9.3.0_vue@3.2.40
   '@vueuse/gesture': 2.0.0-beta.1_vue@3.2.40
   '@vueuse/head': 0.9.8_vue@3.2.40
+  loadash: 1.0.0
   nprogress: 0.2.0
   pinia: 2.0.23_bfjwoga25wxjazzogo7o372nwq
   signature_pad: 4.0.10
@@ -2467,6 +2469,15 @@ packages:
       - '@vue/composition-api'
       - vue
 
+  /@vueuse/shared/9.4.0_vue@3.2.40:
+    resolution: { integrity: sha512-fTuem51KwMCnqUKkI8B57qAIMcFovtGgsCtAeqxIzH3i6nE9VYge+gVfneNHAAy7lj8twbkNfqQSygOPJTm4tQ== }
+    dependencies:
+      vue-demi: 0.13.11_vue@3.2.40
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
   /@zhead/schema-raw/0.8.5:
     resolution: { integrity: sha512-Aq+9mksf5zbtj7HYluT6PVyfpQ6z7mja9MzjFxg76Vt+Q9i0oL1XN6ZYaCXImWRafwbyAxjFQ5aUCVyFn79OpA== }
     dependencies:
@@ -2478,7 +2489,7 @@ packages:
     peerDependencies:
       vue: '>=2.7 || >=3'
     dependencies:
-      '@vueuse/shared': 9.3.0_vue@3.2.40
+      '@vueuse/shared': 9.4.0_vue@3.2.40
       '@zhead/schema': 0.8.5
       '@zhead/schema-raw': 0.8.5
       vue: 3.2.40
@@ -5313,6 +5324,11 @@ packages:
     dependencies:
       uc.micro: 1.0.6
     dev: true
+
+  /loadash/1.0.0:
+    resolution: { integrity: sha512-xlX5HBsXB3KG0FJbJJG/3kYWCfsCyCSus3T+uHVu6QL6YxAdggmm3QeyLgn54N2yi5/UE6xxL5ZWJAAiHzHYEg== }
+    deprecated: Package is unsupport. Please use the lodash package instead.
+    dev: false
 
   /local-pkg/0.4.2:
     resolution: { integrity: sha512-mlERgSPrbxU3BP4qBqAvvwlgW4MTg78iwJdGGnv7kibKjWcJksrG3t6LB5lXI93wXRDvG4NpUgJFmTG4T6rdrg== }

@@ -13,6 +13,7 @@ useHead({
   link: [
     { rel: 'apple-touch-icon', type: 'image/svg+xml', href: '/images/pwa/icon-192x192.png' },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
     { rel: 'mask-icon', type: 'image/svg+xml', href: '/safari-pinned-tab.svg', color: themeColor } as any
   ]
 })

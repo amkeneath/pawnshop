@@ -3,25 +3,31 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { MenuItems } from '~/shims'
 
 export const useMenuStore = defineStore('menu', () => {
-  // USE
-  const router = useRouter()
-  const route = useRoute()
-
-  // STATICS
-  const icon = {
-    plus: markRaw(IconHeroiconsPlusSolid),
-    home: markRaw(IconHeroiconsHomeSolid),
-    ticket: markRaw(IconHeroiconsTicketSolid),
-    squaresPlus: markRaw(IconHeroiconsSquaresPlusSolid),
-    user: markRaw(IconHeroiconsUserSolid)
-  }
+  // CONSTANTS
   const defaultItems: MenuItems = [
-    { icon: markRaw(icon.plus), text: 'New Pawn', isAction: true, action: undefined },
-    { isDivider: true },
-    { icon: markRaw(icon.home), text: 'Home', path: '/' },
-    { icon: markRaw(icon.ticket), text: 'Pawn Tickets', path: '/pawn-tickets' },
-    { icon: markRaw(icon.squaresPlus), text: 'Pawn Items', path: '/pawn-items' },
-    { icon: markRaw(icon.user), text: 'Account', path: '/account' }
+    {
+      icon: 'heroicons-plus',
+      text: 'New Pawn',
+      type: 'group',
+      childMenu: [
+        { icon: 'heroicons-squares-plus', text: 'Existing Account', path: '', color: 'base' },
+        {
+          icon: 'heroicons-scale',
+          text: 'New Pawn',
+          path: '/new/pawn',
+          action(): void {
+            console.log('sample menu action')
+          }
+        },
+        { icon: 'heroicons-user-plus', text: 'New Account', path: '/new/account', color: 'base' },
+        { icon: 'heroicons-user', text: 'Existing Account', path: '/accounts', color: 'base' }
+      ]
+    },
+    { type: 'divider' },
+    { icon: 'heroicons-home', text: 'Home', path: '/' },
+    { icon: 'heroicons-scale', text: 'Pawns', path: '/pawns' },
+    { icon: 'heroicons-squares-2x2', text: 'Pawn Items', path: '/pawn-items' },
+    { icon: 'heroicons-user', text: 'Accounts', path: '/accounts' }
   ]
 
   // REFERENCES
@@ -31,25 +37,33 @@ export const useMenuStore = defineStore('menu', () => {
   // COMPUTED
   const items = computed((): MenuItems => _items.value || defaultItems)
 
+  // USE
+  // const router = useRouter()
+  const route = useRoute()
+
   // METHODS
   function updateActiveItem(path?: string): void {
-    activeItemIndex.value = ((items.value || defaultItems) as MenuItems).findIndex(({ path: p }) => p === (path || route.path))
+    let currentPath = path || route.path
+    let idx = -1
+    while (!~idx && currentPath !== '') {
+      idx = (items.value as MenuItems).findIndex(({ path }) => currentPath === path)
+      if (!~idx) currentPath = currentPath.slice(0, currentPath.lastIndexOf('/'))
+    }
+    activeItemIndex.value = idx
   }
   function setItems(menuItems?: MenuItems): void {
     _items.value = menuItems
     updateActiveItem()
   }
-  function newLoan(event: Event): void {
-    if (event.currentTarget) {
-      router.push('/new-loan')
-    }
+  function clearItems(): void {
+    _items.value = undefined
   }
 
   // INITIALIZE
-  defaultItems[0].action = newLoan
 
   return {
     activeItemIndex,
+    clearItems,
     items,
     setItems,
     updateActiveItem

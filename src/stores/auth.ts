@@ -3,21 +3,19 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { AuthData } from '~/shims'
 
 export const useAuthStore = defineStore('auth', () => {
-  const URL = {
-    login: '/login',
-    logout: '/logout'
-  }
-
+  const AUTH_URL = { login: '/login', logout: '/logout' }
   const userStorage = useLocalStorage('user', '')
+  const auth = reactive<AuthData>({ username: '', password: '' })
+  const url = ref('')
 
   const user = ref(userStorage.value)
   const loggedIn = ref(!!userStorage.value)
   const superUser = ref(false)
 
-  const url = ref('')
-  const auth = reactive<AuthData>({ username: '', password: '' })
-  const { abort, canAbort, execute, error, data, isFetching, statusCode } = useMyFetch(url, { immediate: false }).post(auth).text()
+  // FETCH
+  const { abort, canAbort, data, error, execute, isFetching, onFetchError, onFetchResponse } = useMyFetch(url, { immediate: false }).post(auth).text()
 
+  // METHODS
   function _fetch(fetchURL: string, username = '', password = ''): void {
     if (canAbort.value) abort()
     url.value = fetchURL
@@ -26,27 +24,26 @@ export const useAuthStore = defineStore('auth', () => {
     execute()
   }
   function login({ username, password }: AuthData): void {
-    console.log('login')
-    _fetch(URL.login, username, password)
-    // const formData = new FormData()
-    // Object.entries(loginData).forEach((entry) => {
-    //   formData.append(...entry)
-    // })
+    _fetch(AUTH_URL.login, username, password)
   }
-
   function logout(): void {
-    console.log('logout')
-    _fetch(URL.logout)
+    _fetch(AUTH_URL.logout)
   }
 
-  watch([data, url], ([newData, newUrl]) => {
-    console.log('changes')
-    loggedIn.value = newUrl === URL.login && newData === 'success' && statusCode.value === 200
-  })
+  // LISTENERS
   watch(loggedIn, (newLoggedIn) => {
     user.value = newLoggedIn ? auth.username : ''
     userStorage.value = user.value
-    location.reload()
+    location.reload() // FORCE PAGE TO RELOAD WHEN LOGGED IN STATUS CHANGED
+  })
+
+  onFetchResponse((response) => {
+    const path = new URL(response.url).pathname
+    console.log('RESPONSE:onFetch', response)
+    loggedIn.value = path === AUTH_URL.login && data.value === 'success'
+  })
+  onFetchError((error) => {
+    console.log('ERROR:onFetch', error)
   })
 
   return {
@@ -58,7 +55,6 @@ export const useAuthStore = defineStore('auth', () => {
     data,
     error,
     isFetching,
-    statusCode,
     superUser
   }
 })

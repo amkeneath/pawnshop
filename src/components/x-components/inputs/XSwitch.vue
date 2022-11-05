@@ -2,8 +2,8 @@
 interface Props {
   modelValue?: boolean
   on?: boolean
-  icon?: unknown
-  altIcon?: unknown
+  icon?: string
+  altIcon?: string
   vertical?: boolean
 }
 interface Emits {
@@ -23,28 +23,27 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>()
 
 const id = generateId()
-const component = ref()
-const prop = ref()
+
+const switchElement = ref()
+const propElement = ref()
 
 const { modelValue, on } = toRefs(props)
 const model = ref(false)
 
-const onToggle = (): void => {
+function onToggle(): void {
   emit('update:modelValue', model.value)
   emit('change', model.value)
   emit('toggle', model.value)
 }
-
-const setProp = (): void => {
-  if (component.value) {
+function setProp(): void {
+  if (switchElement.value) {
     nextTick(() => {
-      const style = getComputedStyle(component.value, ':before')
-      if (style && prop.value) {
-        const element: HTMLElement = prop.value
+      const style = getComputedStyle(switchElement.value, ':before')
+      if (style && propElement.value) {
+        const element: HTMLElement = propElement.value
         const ps = ['background-color', 'border-color', 'border-width', 'border-radius']
         type StyleKey = keyof typeof style
         ps.forEach((p) => {
-          // console.log(`>>>>>>>>>>>> ${p}`, style[camelCase(p) as StyleKey] as string)
           element.style.setProperty(p, style[toCamelCase(p) as StyleKey] as string)
         })
       }
@@ -65,7 +64,7 @@ watch([theme, isDark], () => {
 })
 
 useMutationObserver(
-  component,
+  switchElement,
   (mutations) => {
     if (mutations[0]) setProp()
   },
@@ -79,25 +78,25 @@ onMounted(() => {
 
 <template>
   <label
-    ref="component"
+    ref="switchElement"
     :for="id"
     :class="[vertical ? 'w-8' : 'w-16']"
     class="x-switch relative flex cursor-pointer overflow-hidden rounded-full border p-0.5 before:hidden before:rounded-full before:bg-base-content"
   >
     <div :class="[vertical ? 'aspect-h-2 aspect-w-1' : 'aspect-h-1 aspect-w-2']" class="relative m-auto w-full">
-      <input :id="id" ref="checkbox" v-model="model" type="checkbox" class="hidden" @change="onToggle" />
+      <input :id="id" v-model="model" type="checkbox" class="hidden" @change="onToggle()" />
       <div
         :class="[vertical ? (model ? 'top-0' : 'top-1/2') : model ? 'left-0' : '-left-1/2', { 'flex-col-reverse': vertical }]"
         class="absolute flex h-full w-full duration-300"
       >
         <span :class="[vertical ? 'w-full h-1/2' : 'h-full w-1/2']" class="flex flex-none"
-          ><component :is="props.icon" :class="[vertical ? 'w-full h-2/3' : 'h-full w-2/3']" class="m-auto"
+          ><x-icon :icon="props.icon" :class="[vertical ? 'w-full h-2/3' : 'h-full w-2/3']" class="m-auto"
         /></span>
         <span :class="[vertical ? 'w-full h-1/2' : 'h-full w-1/2']" class="flex flex-none items-center"
-          ><span ref="prop" class="aspect-h-1 aspect-w-1 block w-full"
+          ><span ref="propElement" class="aspect-h-1 aspect-w-1 block w-full"
         /></span>
         <span :class="[vertical ? 'w-full h-1/2' : 'h-full w-1/2']" class="flex flex-none"
-          ><component :is="props.altIcon || props.icon" :class="[vertical ? 'w-full h-2/3' : 'h-full w-2/3']" class="m-auto"
+          ><x-icon :icon="props.altIcon || props.icon" :class="[vertical ? 'w-full h-2/3' : 'h-full w-2/3']" class="m-auto"
         /></span>
       </div>
     </div>

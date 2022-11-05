@@ -15,7 +15,8 @@ const customThemes = [
       'base-300': '#9E9DB0',
       'base-content': '#626466',
 
-      '--rounded-prop': '.25rem'
+      '--rounded-prop': '.25rem',
+      '--black': '0 100 50'
     }
   }
 ]

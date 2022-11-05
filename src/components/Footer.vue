@@ -14,25 +14,8 @@ onMounted(() => {
 
 <template>
   <nav class="mt-6 text-xl">
-    <router-link class="icon-btn mx-2" to="/" :title="t('button.home')">
-      <carbon-scooter />
-    </router-link>
-
-    <button data-toggle-theme="dark,light" data-act-class="dark" class="icon-btn mx-2 !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
-      <carbon-moon v-if="isDark" />
-      <carbon-sun v-else />
-    </button>
-
-    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
-      <carbon-language />
-    </a>
-
-    <router-link class="icon-btn mx-2" to="/about" :title="t('button.about')">
-      <carbon-dicom-overlay />
-    </router-link>
-
-    <a class="icon-btn mx-2" rel="noreferrer" href="https://github.com/ctholho/vitespa" target="_blank" title="GitHub">
-      <carbon-logo-github />
+    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click.stop="toggleLocales()">
+      <x-icon />
     </a>
   </nav>
 </template>

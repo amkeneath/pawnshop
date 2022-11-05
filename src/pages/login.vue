@@ -8,7 +8,7 @@ import { useAuthStore } from '~/stores/auth'
 const auth = useAuthStore()
 
 // REFERENCES
-const { isFetching, data, error, statusCode, loggedIn } = storeToRefs(auth)
+const { isFetching, data } = storeToRefs(auth)
 
 // METHODS
 const authData = reactive<AuthData>({
@@ -19,9 +19,11 @@ const authData = reactive<AuthData>({
 function login(): void {
   auth.login(authData)
 }
+
+// INITIALIZE
+setThemeColorByProp(controlsOnRight ? '--n' : '--b1')
 </script>
 <route lang="yaml">
-name: login
 meta:
   layout: empty
   middleware: [guest]
@@ -30,13 +32,7 @@ meta:
 <template>
   <section class="flex">
     <x-section class="w-1/2">
-      <div class="full">
-        <div>isFetching: {{ isFetching }}</div>
-        <div>data: {{ data }}</div>
-        <div>error: {{ error }}</div>
-        <div>statusCode: {{ statusCode }}</div>
-        <div>loggedIn: {{ loggedIn }}</div>
-      </div>
+      <div class="full"></div>
       <div class="flex h-full w-full flex-col items-center justify-center gap-2">
         <logo class="mb-6 h-1/2 w-1/2" />
         <h1 class="uppercase">Pawnshop</h1>
@@ -48,15 +44,27 @@ meta:
         <form id="login" class="form w-full" @submit.prevent="login()">
           <div class="form-control relative w-full">
             <span class="label absolute flex h-full w-14 items-center justify-center">
-              <heroicons-user-solid />
+              <x-icon icon="heroicons-user-solid" :class="{ '!text-error': data === 'invalid-user' }" />
             </span>
-            <input v-model="authData.username" type="text" placeholder="Username" class="input-bordered input w-full pl-14" />
+            <input
+              v-model="authData.username"
+              type="text"
+              placeholder="Username"
+              class="input-bordered input w-full pl-14"
+              :class="{ '!input-error': data === 'invalid-user' }"
+            />
           </div>
           <div class="form-control relative w-full">
             <span class="label absolute flex h-full w-14 items-center justify-center">
-              <heroicons-lock-closed-solid />
+              <x-icon icon="heroicons-lock-closed" :class="{ '!text-error': data === 'invalid-password' }" />
             </span>
-            <input v-model="authData.password" type="password" placeholder="Password" class="input-bordered input w-full pl-14" />
+            <input
+              v-model="authData.password"
+              type="password"
+              placeholder="Password"
+              class="input-bordered input w-full pl-14"
+              :class="{ '!input-error': data === 'invalid-password' }"
+            />
           </div>
           <div class="text-right">
             <a class="link">Forgot password?</a>

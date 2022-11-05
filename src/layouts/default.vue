@@ -13,27 +13,30 @@ const { activeItemIndex, items } = storeToRefs(menu)
 // WATCHERS
 watch(route, () => {
   menu.updateActiveItem()
+  setThemeColorByProp('--b1')
 })
 
 // HOOKS
 onBeforeMount(() => {
   menu.updateActiveItem()
 })
-const icon = {
-  wifi: markRaw(IconHeroiconsWifi),
-  menu
-}
 </script>
 
 <template>
-  <main class="justify-end bg-base-100 text-base-content">
-    <div v-if="isOverlayVisible" id="title-bar" class="windows-overlay items-center duration-300" :class="{ 'justify-end pl-4': controlsOnRight }">
-      <component :is="icon.wifi" :class="[isOnline ? 'text-success' : 'text-error']"></component>
-    </div>
-    <div class="content flex h-screen w-screen overflow-hidden">
-      <x-side-menu :active-item-index="activeItemIndex" :items="items" />
+  <main class="h-screen w-screen overflow-hidden bg-base-100 text-base-content">
+    <titlebar />
+    <div class="screen-safe-area flex">
+      <x-side-menu :active-item-index="activeItemIndex" :items="items" class="draggable">
+        <template #top>
+          <logo class="h-full w-[150%]" />
+        </template>
+        <template #bottom>
+          <x-icon v-if="!isOverlayVisible" icon="heroicons-wifi" :class="isOnline ? 'text-success' : 'text-error'" />
+          <x-switch icon="heroicons-moon" alt-icon="heroicons-sun" vertical :on="isDark" class="border before:!bg-accent" @toggle="toggleDark(!isDark)" />
+        </template>
+      </x-side-menu>
       <!-- ROUTER VIEW -->
-      <router-view class="max-h-full w-full" />
+      <router-view class="flex-1" />
     </div>
   </main>
 </template>

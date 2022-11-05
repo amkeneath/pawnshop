@@ -1,5 +1,6 @@
 import { BasicColorSchema } from '@vueuse/core'
 
+import { getStylePropertyValue } from './element'
 import { extendBeforeExtension, extractNumbers } from './string'
 
 type ThemeMode = 'auto' | 'light' | 'dark'
@@ -100,13 +101,16 @@ function setThemePair(valueLight?: string, valueDark?: string): void {
   }
 }
 // Accepts css prop e.g. --b1
-function setThemeColorByProp(prop?: string): void {
+function setThemeColorByProp(prop?: string, fallback?: string): void {
   nextTick(() => {
     prop = prop || lastProp
-    const value = getComputedStyle(document.querySelector(themeSelector) as HTMLElement)?.getPropertyValue(prop)
+    const value = getStylePropertyValue(document.querySelector(themeSelector) as HTMLElement, prop)
     if (value) {
       lastProp = prop
       themeColor.value = hslToHex(...extractNumbers(value))
+    } else if (fallback) {
+      lastProp = '--'
+      themeColor.value = fallback
     }
   })
 }

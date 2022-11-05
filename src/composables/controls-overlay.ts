@@ -12,7 +12,7 @@ const controlsOnRight = ref(false)
 function updateOverlay(): void {
   isOverlayVisible.value = !!_navigator.windowControlsOverlay?.visible
   const onRight = (controlsOnRight.value = _navigator.windowControlsOverlay?.getTitlebarAreaRect?.()?.x === 0)
-  document.querySelector('#title-bar')?.classList[getAddOrRemove(onRight)]('controls-on-right')
+  document.querySelector('#titlebar')?.classList[getAddOrRemove(onRight)]('controls-on-right')
 }
 
 // INITIALIZE

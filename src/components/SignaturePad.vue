@@ -1,24 +1,19 @@
 <script setup lang="ts">
 import SignaturePad from 'signature_pad'
 
-type EventAction = (e: KeyboardEvent) => void
+import { getStylePropertyValue } from '~/composables/element'
+import { ListenerCleanup, OnComponentOpenParams } from '~/shims'
 
 interface Props {
   modelValue?: boolean
-  id?: string
 }
 interface Emits {
   (e: 'update:modelValue', payload: boolean): void
-  (e: 'close'): void
-  (e: 'open'): void
+  (e: 'close', payload: number): void
+  (e: 'open', payload: OnComponentOpenParams): void
   (e: 'save', payload: string): void
 }
-interface ContentData {
-  width: number
-  height: number
-  xOffset: number
-  yOffset: number
-}
+type EventAction = (e: KeyboardEvent) => void
 interface SignatureKeyboardEvents {
   Backspace: EventAction
   Delete: EventAction
@@ -30,31 +25,61 @@ interface ActionKeys {
   ctrlKey: boolean
   shiftKey: boolean
 }
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: undefined,
-  id: 'default-camera'
-})
-const emit = defineEmits<Emits>()
-
-const icons = {
-  arrowDownOnSquare: markRaw(IconHeroiconsArrowDownOnSquare),
-  arrowUturnLeft: markRaw(IconHeroiconsArrowUturnLeft),
-  trash: markRaw(IconHeroiconsTrash),
-  xMark: markRaw(IconHeroiconsXMark)
+interface ContentData {
+  width: number
+  height: number
+  xOffset: number
+  yOffset: number
 }
 
-const canvasRef = ref(null)
-const penColorRef = ref(null)
-
+// PROPS
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: undefined
+})
 const { modelValue } = toRefs(props)
-const model = ref(false)
 
-const drawing = ref(false)
+// EMITS
+const emit = defineEmits<Emits>()
 
-let signaturePad = {} as SignaturePad
+// CONSTANTS
+const keyboardEventListener = ['keydown', keyboardEvent] as const
+const DEFAULT = true
+const actions: SignatureKeyboardEvents = {
+  Backspace(e: KeyboardEvent): void {
+    if (ctrlPressed(e)) undo()
+  },
+  Delete(e: KeyboardEvent): void {
+    if (ctrlPressed(e)) clear()
+  },
+  Escape(): void {
+    close()
+  },
+  Enter(e: KeyboardEvent): void {
+    if (ctrlPressed(e)) save()
+  }
+}
 
-const getCanvasContentData = (canvas: HTMLCanvasElement): ContentData => {
+// NON-CONSTANTS
+let signaturePad: SignaturePad
+let listenerCleanup: ListenerCleanup
+let setColorInterval: number
+let setColorTimeout: number
+
+// REFERENCES
+const canvasElement = ref<HTMLCanvasElement>()
+const colorViewElement = ref<HTMLDivElement>()
+const model = ref<boolean>(DEFAULT)
+const drawing = ref<boolean>(false)
+
+// METHODS
+function ctrlPressed({ altKey, ctrlKey, shiftKey }: ActionKeys): boolean {
+  return !altKey && ctrlKey && !shiftKey
+}
+function keyboardEvent(e: KeyboardEvent): void {
+  actions[e.code as keyof typeof actions]?.(e)
+}
+
+function getCanvasContentData(canvas: HTMLCanvasElement): ContentData {
   const context = canvas.getContext('2d')
   const pix = { x: [] as Array<number>, y: [] as Array<number> }
   const canvasHeight = canvas.height
@@ -85,37 +110,57 @@ const getCanvasContentData = (canvas: HTMLCanvasElement): ContentData => {
   const yOffset = pix.y[0]
   return { width, height, xOffset, yOffset }
 }
-const resizeCanvas = (): void => {
-  if (canvasRef.value) {
-    const canvas: HTMLCanvasElement = canvasRef.value
+function resizeCanvas(): void {
+  if (canvasElement.value) {
+    const canvas: HTMLCanvasElement = canvasElement.value
     const ratio = Math.max(window.devicePixelRatio || 1, 1)
     canvas.width = canvas.offsetWidth * ratio
     canvas.height = canvas.offsetHeight * ratio
     canvas.getContext('2d')?.scale(ratio, ratio)
-    signaturePad.clear()
+    signaturePad?.clear()
   }
 }
-const setSignaturePad = (): void => {
-  if (canvasRef.value && penColorRef.value) {
-    const canvas: HTMLCanvasElement = canvasRef.value
-    const penColor: HTMLElement = penColorRef.value
-    const color = getComputedStyle(penColor).getPropertyValue('background-color')
+function setSignaturePad(): void {
+  if (canvasElement.value && colorViewElement.value) {
+    const canvas: HTMLCanvasElement = canvasElement.value
+    const colorView: HTMLDivElement = colorViewElement.value
+    const color = getStylePropertyValue(colorView, 'background-color')
     const config = { minWidth: 5, maxWidth: 10, penColor: color }
     signaturePad = new SignaturePad(canvas, config)
-    signaturePad.addEventListener('beginStroke', () => {
+    signaturePad?.addEventListener('beginStroke', () => {
       drawing.value = true
     })
-    signaturePad.addEventListener('endStroke', () => {
+    signaturePad?.addEventListener('endStroke', () => {
       drawing.value = false
     })
     resizeCanvas()
   }
 }
 
-const save = async (): Promise<void> => {
-  const data = signaturePad.toData()
-  if (canvasRef.value) {
-    const canvas: HTMLCanvasElement = canvasRef.value
+function setColor(): void {
+  if (canvasElement.value && colorViewElement.value) {
+    clearTimeout(setColorTimeout)
+    const colorView: HTMLDivElement = colorViewElement.value
+    setColorInterval = setInterval(() => {
+      if (canvasElement.value && colorViewElement.value) {
+        const color = getStylePropertyValue(colorView, 'background-color')
+        const data = signaturePad?.toData()
+        data.forEach((data) => {
+          data.penColor = color
+        })
+        signaturePad.fromData(data)
+      }
+    }, 50)
+    setColorTimeout = setTimeout(() => {
+      clearInterval(setColorInterval)
+    }, 1000)
+  }
+}
+
+async function save(): Promise<void> {
+  if (canvasElement.value) {
+    const data = signaturePad?.toData()
+    const canvas: HTMLCanvasElement = canvasElement.value
     const { xOffset, yOffset, width, height } = getCanvasContentData(canvas)
     data.forEach((data) => {
       data.penColor = 'black' // Always export signature with black color
@@ -141,91 +186,63 @@ const save = async (): Promise<void> => {
     emit('save', altData)
   }
 }
-const undo = (): void => {
-  const data = signaturePad.toData()
+function undo(): void {
+  const data = signaturePad?.toData()
   if (data) {
     data.pop()
-    signaturePad.fromData(data)
+    signaturePad?.fromData(data)
   }
 }
-const clear = (): void => signaturePad.clear()
-
-const open = (viaModel = false): void => {
-  if (!viaModel) emit('update:modelValue', true)
-  emit('open')
+function clear(): void {
+  signaturePad?.clear()
 }
-const close = (viaModel = false): void => {
-  if (!viaModel) emit('update:modelValue', false)
-  emit('close')
+function close(): void {
+  model.value = false
 }
 
-const ctrlPressed = ({ altKey, ctrlKey, shiftKey }: ActionKeys): boolean => !altKey && ctrlKey && !shiftKey
-const actions: SignatureKeyboardEvents = {
-  Backspace: (e: KeyboardEvent): void => {
-    if (ctrlPressed(e)) undo()
-  },
-  Delete: (e: KeyboardEvent): void => {
-    if (ctrlPressed(e)) signaturePad.clear()
-  },
-  Escape: (): void => close(),
-  Enter: (e: KeyboardEvent): void => {
-    if (ctrlPressed(e)) save()
-  }
+function modalOpen(duration = 0): void {
+  listenerCleanup = useEventListener(...keyboardEventListener)
+  emit('update:modelValue', true)
+  emit('open', { duration, actions: { save, undo, clear, close } })
 }
-const keyboardEvent = (e: KeyboardEvent): void => actions[e.code as keyof typeof actions]?.(e)
-const keyboardEventListener = ['keydown', keyboardEvent] as const
+function modalClosed(duration = 0): void {
+  listenerCleanup?.()
+  emit('update:modelValue', false)
+  emit('close', duration)
+}
+
+// INITIALIZE
+
+/** WATCHERS AND OBSERVERS */
+useResizeObserver(canvasElement, resizeCanvas)
 
 watch(
   [modelValue],
   ([newModelValue], [oldModelValue]) => {
     if (newModelValue !== oldModelValue) {
-      model.value = typeof newModelValue === 'boolean' ? newModelValue : true
-      if (model.value) open(true)
-      else close(true)
+      model.value = typeof newModelValue === 'boolean' ? newModelValue : DEFAULT
     }
   },
   { immediate: true }
 )
-onUnmounted(() => {
-  window.removeEventListener(...keyboardEventListener)
+
+watch(theme, () => {
+  setColor()
 })
 
+/** HOOKS */
 onMounted(() => {
   setSignaturePad()
-  window.addEventListener(...keyboardEventListener)
 })
-
-useResizeObserver(canvasRef, resizeCanvas)
 </script>
 
 <template>
-  <div id="xxx-yyy" class="fixed top-0 left-0 z-50 h-screen w-screen" :class="{ 'hidden -z-10': !model }">
-    <div class="h-full w-full p-6">
-      <canvas ref="canvasRef" class="absolute top-0 left-0 h-full w-full bg-base-200" />
-      <header
-        class="navbar card flex flex-row gap-4 overflow-visible bg-base-100 text-base-content shadow transition-all duration-300"
-        :class="{ 'opacity-0 -translate-y-full': drawing }"
-      >
-        <div class="navbar-start"></div>
-        <div class="navbar-center">
-          <button class="btn-ghost btn-circle btn" @click.stop="close()">
-            <component :is="icons.xMark" class="text-base" />
-          </button>
-          <button class="btn-ghost btn-circle btn">
-            <div ref="penColorRef" class="h-5 w-5 rounded-full bg-base-content" />
-          </button>
-          <button class="btn-ghost btn-circle btn" @click.stop="clear()">
-            <component :is="icons.trash" class="text-base" />
-          </button>
-          <button class="btn-ghost btn-circle btn" @click.stop="undo()">
-            <component :is="icons.arrowUturnLeft" class="text-base" />
-          </button>
-          <button class="btn-ghost btn-circle btn" @click.stop="save()">
-            <component :is="icons.arrowDownOnSquare" class="text-base" />
-          </button>
-        </div>
-        <div class="navbar-end"></div>
-      </header>
+  <x-modal v-model="model" class="x-signature-pad" @open="modalOpen($event)" @close="modalClosed($event)">
+    <div class="container relative flex h-full w-full items-center justify-end">
+      <canvas ref="canvasElement" class="absolute top-0 left-0 h-full w-full" />
+      <button class="btn-ghost btn-circle btn-lg btn z-10 duration-300" :class="{ 'translate-x-20': drawing }">
+        <div ref="colorViewElement" class="h-12 w-12 rounded-full bg-current" />
+      </button>
     </div>
-  </div>
+  </x-modal>
 </template>

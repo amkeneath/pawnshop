@@ -1,5 +1,6 @@
 export * from './controls-overlay'
 export * from './date'
+export * from './element'
 export * from './fetch'
 export * from './generate'
 export * from './network'
